@@ -1,0 +1,11 @@
+/* Additional component-specific styles if needed */
+
+/* Ensure smooth transitions for theme switching */
+* {
+  transition: background-color var(--transition-smooth), color var(--transition-smooth);
+}
+
+/* Prevent transition on page load */
+.preload * {
+  transition: none !important;
+}
