@@ -2,12 +2,25 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Menu } from 'lucide-react';
 import { Button } from './ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from './ui/sheet';
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +36,8 @@ export default function Navigation() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  const navItems = ['Work', 'Skills', 'Resume', 'Contact'];
 
   return (
     <motion.header
@@ -47,9 +62,9 @@ export default function Navigation() {
             </button>
           </motion.div>
 
-          {/* Navigation Links */}
+          {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center gap-8">
-            {['Work', 'Skills', 'Resume', 'Contact'].map((item) => (
+            {navItems.map((item) => (
               <motion.button
                 key={item}
                 onClick={() => scrollToSection(item.toLowerCase())}
@@ -68,28 +83,54 @@ export default function Navigation() {
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="rounded-full"
             >
-              {theme === 'dark' ? (
+              {mounted && (theme === 'dark' ? (
                 <Sun className="h-5 w-5" />
               ) : (
                 <Moon className="h-5 w-5" />
-              )}
+              ))}
             </Button>
           </div>
 
           {/* Mobile Menu */}
           <div className="md:hidden flex items-center gap-4">
+            {/* Mobile Dark Mode Toggle */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="rounded-full"
             >
-              {theme === 'dark' ? (
+              {mounted && (theme === 'dark' ? (
                 <Sun className="h-5 w-5" />
               ) : (
                 <Moon className="h-5 w-5" />
-              )}
+              ))}
             </Button>
+
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                <SheetHeader>
+                  <SheetTitle className="text-left">Navigation</SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col gap-4 mt-8">
+                  {navItems.map((item) => (
+                    <SheetClose asChild key={item}>
+                      <button
+                        onClick={() => scrollToSection(item.toLowerCase())}
+                        className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors text-left py-2 border-b border-border/50"
+                      >
+                        {item}
+                      </button>
+                    </SheetClose>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </nav>
       </div>
