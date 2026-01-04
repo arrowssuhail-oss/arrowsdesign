@@ -1,0 +1,22 @@
+
+> web@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.1 (Turbopack)
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 2.4s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/Contact.tsx:21:25
+Type error: Parameter 'e' implicitly has an 'any' type.
+
+  19 |   const [focusedField, setFocusedField] = useState(null);
+  20 |
+> 21 |   const handleChange = (e) => {
+     |                         ^
+  22 |     setFormData({ ...formData, [e.target.name]: e.target.value });
+  23 |   };
+  24 |
+Next.js build worker exited with code: 1 and signal: null

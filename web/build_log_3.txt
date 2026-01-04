@@ -1,0 +1,29 @@
+
+> web@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.1 (Turbopack)
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./src/app/globals.css:1858:8
+Parsing CSS source code failed
+  1856 |
+  1857 | /* Import Inter Font */
+> 1858 | @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+       |        ^
+  1859 |
+  1860 | body {
+  1861 |   margin: 0;
+
+@import rules must precede all rules aside from @charset and @layer statements
+
+Import trace:
+  Client Component Browser:
+    ./src/app/globals.css [Client Component Browser]
+    ./src/app/layout.tsx [Server Component]
+
+
+    at <unknown> (./src/app/globals.css:1858:8)

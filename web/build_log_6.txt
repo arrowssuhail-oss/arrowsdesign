@@ -1,0 +1,22 @@
+
+> web@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.1 (Turbopack)
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 2.2s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/ui/accordion.tsx:10:43
+Type error: Property 'className' does not exist on type '{}'.
+
+   8 | const Accordion = AccordionPrimitive.Root
+   9 |
+> 10 | const AccordionItem = React.forwardRef(({ className, ...props }, ref) => (
+     |                                           ^
+  11 |   <AccordionPrimitive.Item ref={ref} className={cn("border-b", className)} {...props} />
+  12 | ))
+  13 | AccordionItem.displayName = "AccordionItem"
+Next.js build worker exited with code: 1 and signal: null
