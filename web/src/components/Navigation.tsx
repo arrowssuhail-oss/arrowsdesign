@@ -1,22 +1,40 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { useTheme } from 'next-themes';
-import { Moon, Sun, Menu } from 'lucide-react';
-import { Button } from './ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetClose,
-} from './ui/sheet';
+"use client";
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Menu, X, Moon, Sun } from "lucide-react";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
-export default function Navigation() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mounted, setMounted] = useState(false);
+// Ensure StoryViewer exists or use placeholder
+import StoryViewer from "@/components/StoryViewer";
+
+const navLinks = [{
+  name: "About",
+  href: "/#about"
+}, {
+  name: "Skills",
+  href: "/#skills"
+}, {
+  name: "Projects",
+  href: "/#works"
+}, {
+  name: "Resume",
+  href: "/#resume"
+}, {
+  name: "Contact",
+  href: "/#contact"
+}];
+
+const Navbar = () => {
+  const router = useRouter();
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     setMounted(true);
@@ -24,116 +42,162 @@ export default function Navigation() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+
+      // Handle background transparency
+      setIsScrolled(currentScrollY > 50);
+
+      // Handle hide/show on mobile scroll
+      if (window.innerWidth < 768) {
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          // Scrolling down & past 100px - Hide
+          setIsVisible(false);
+          setIsMobileMenuOpen(false); // Close menu if open
+        } else {
+          // Scrolling up - Show
+          setIsVisible(true);
+        }
+      } else {
+        setIsVisible(true); // Always visible on desktop
+      }
+
+      setLastScrollY(currentScrollY);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+  // Story State
+  const [storyData, setStoryData] = useState<{ content: string; type: 'image' | 'video'; timestamp: number } | null>(null);
+  const [isStoryOpen, setIsStoryOpen] = useState(false);
+  const [hasUnseenStory, setHasUnseenStory] = useState(false);
+
+  useEffect(() => {
+    const checkStory = () => {
+      // Logic to check usage of localStorage on client side
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem("arrows_story_data");
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored);
+            if (parsed.active && (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000)) { // 24h expiry
+              setStoryData(prev => {
+                if (prev?.timestamp === parsed.timestamp) return prev; // No change
+                return parsed;
+              });
+
+              // Check if seen locally
+              const seenTimestamp = localStorage.getItem("arrows_story_seen");
+              setHasUnseenStory(seenTimestamp !== parsed.timestamp.toString());
+            } else {
+              setStoryData(null);
+            }
+          } catch (e) {
+            console.error("Failed to parse story data", e);
+          }
+        } else {
+          setStoryData(null);
+        }
+      }
+    };
+
+    checkStory();
+    const interval = setInterval(checkStory, 2000); // Check every 2s for updates
+    return () => clearInterval(interval);
   }, []);
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleStoryClick = () => {
+    if (!storyData) return;
+    setIsStoryOpen(true);
+    setHasUnseenStory(false);
+    localStorage.setItem("arrows_story_seen", storyData.timestamp.toString());
   };
 
-  const navItems = ['Work', 'Skills', 'Resume', 'Contact'];
+  const handleLinkClick = (href: string) => {
+    // If it's a hash link, we might want to handle smooth scroll manually or let Next.js handle it.
+    // Next.js Link handles ID scrolling automatically if it's on the same page.
+    setIsMobileMenuOpen(false);
+  };
 
   return (
-    <motion.header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass-card shadow-card py-4' : 'py-6'
-        }`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-        <nav className="flex items-center justify-between">
-          {/* Logo */}
-          <motion.div
-            className="text-2xl font-bold tracking-tighter"
-            whileHover={{ scale: 1.05 }}
-          >
-            <button
-              onClick={() => scrollToSection('hero')}
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Portfolio
-            </button>
-          </motion.div>
+    <>
+      <nav className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6",
+        isScrolled ? "py-4" : "py-6",
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      )}>
+        <div className={cn("max-w-6xl mx-auto flex items-center justify-between px-7 py-4 rounded-3xl transition-all duration-300", isScrolled ? "bg-background/80 backdrop-blur-xl shadow-md border border-border/50" : "")}>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+              <img
+                src="/logo white.png"
+                alt="arrows.in logo"
+                className="h-19 w-24 object-contain transition-all duration-300"
+              />
+            </Link>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <motion.button
-                key={item}
-                onClick={() => scrollToSection(item.toLowerCase())}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.95 }}
+            {/* Story Ring */}
+            {storyData && (
+              <button
+                onClick={handleStoryClick}
+                className="group relative flex items-center justify-center -ml-2 transition-transform hover:scale-105"
               >
-                {item}
-              </motion.button>
-            ))}
+                <div className={cn(
+                  "absolute inset-0 rounded-full bg-gradient-to-tr from-yellow-400 via-rose-500 to-purple-600 opacity-100",
+                  hasUnseenStory ? "animate-spin-slow p-[2px]" : "p-[1px] grayscale opacity-50"
+                )}>
+                  <div className="w-full h-full bg-background rounded-full" />
+                </div>
+                <div className={cn(
+                  "relative w-10 h-10 rounded-full border-2 border-background overflow-hidden",
+                  hasUnseenStory ? "w-10 h-10" : "w-10 h-10 opacity-80"
+                )}>
+                  <img src={storyData.content} alt="Story" className="w-full h-full object-cover" />
+                </div>
+              </button>
+            )}
+          </div>
+
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map(link => <Link key={link.name} href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              {link.name}
+            </Link>)}
 
             {/* Dark Mode Toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="rounded-full"
-            >
-              {mounted && (theme === 'dark' ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              ))}
-            </Button>
           </div>
 
-          {/* Mobile Menu */}
-          <div className="md:hidden flex items-center gap-4">
-            {/* Mobile Dark Mode Toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="rounded-full"
-            >
-              {mounted && (theme === 'dark' ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              ))}
-            </Button>
+          {/* Mobile menu button */}
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+        </div>
 
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <SheetHeader>
-                  <SheetTitle className="text-left">Navigation</SheetTitle>
-                </SheetHeader>
-                <div className="flex flex-col gap-4 mt-8">
-                  {navItems.map((item) => (
-                    <SheetClose asChild key={item}>
-                      <button
-                        onClick={() => scrollToSection(item.toLowerCase())}
-                        className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors text-left py-2 border-b border-border/50"
-                      >
-                        {item}
-                      </button>
-                    </SheetClose>
-                  ))}
-                </div>
-              </SheetContent>
-            </Sheet>
+        {/* Mobile menu */}
+        {isMobileMenuOpen && <div className="md:hidden mt-2 mx-auto max-w-6xl glass-card p-6 animate-fade-up bg-background/95 backdrop-blur-lg rounded-xl border border-white/10">
+          <div className="flex flex-col gap-4">
+            {navLinks.map(link => <Link key={link.name} href={link.href} className="text-foreground py-2 border-b border-border/50 last:border-0" onClick={() => setIsMobileMenuOpen(false)}>
+              {link.name}
+            </Link>)}
+
+
+            <Link href="/#contact" onClick={() => setIsMobileMenuOpen(false)}>
+              <Button variant="default" className="mt-2 w-full">
+                Let's Talk
+              </Button>
+            </Link>
           </div>
-        </nav>
-      </div>
-    </motion.header>
+        </div>}
+      </nav>
+
+      {/* Story Overlay */}
+      <StoryViewer
+        isOpen={isStoryOpen}
+        onClose={() => setIsStoryOpen(false)}
+        storyData={storyData}
+      />
+    </>
   );
-}
+};
+export default Navbar;

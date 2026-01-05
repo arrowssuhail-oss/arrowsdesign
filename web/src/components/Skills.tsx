@@ -1,56 +1,45 @@
-"use client"
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Badge } from './ui/badge';
+import { Palette, Layout, PenTool, Monitor, Layers, Sparkles, Video } from "lucide-react";
 
 const skills = [
-  { name: 'Figma', level: 'Expert' },
-  { name: 'Photoshop', level: 'Advanced' },
-  { name: 'UI/UX Design', level: 'Expert' },
+  { name: "Adobe Creative Suite", icon: PenTool, description: "Photoshop, Illustrator & more" },
+  { name: "UI/UX Design", icon: Layout, description: "WordPress, Figma (Learning)" },
+  { name: "Graphic Design", icon: Palette, description: "Photoshop, Illustrator" },
+  { name: "Illustration", icon: PenTool, description: "Custom graphics" },
+  { name: "Web Design", icon: Monitor, description: "Google Antigravity" },
+  { name: "Design Systems", icon: Layers, description: "Refference" },
+  { name: "AI Tools", icon: Sparkles, description: "Latest AI Tools" },
+  { name: "Video Editing", icon: Video, description: "Premiere Pro, After Effects, DaVinci Resolve" },
 ];
 
-export default function Skills() {
+const SkillsSection = () => {
   return (
-    <section id="skills" className="py-32 px-6 sm:px-8 lg:px-12 bg-secondary/30">
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <motion.div
-          className="text-center space-y-4 mb-20"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter">
-            Skills & <span className="text-gradient">Expertise</span>
+    <section id="skills" className="py-32 px-6 bg-gradient-to-b from-transparent via-muted/30 to-transparent">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-16">
+          <span className="text-accent text-sm font-medium uppercase tracking-widest block mb-4">Skills</span>
+          <h2 className="text-4xl md:text-5xl font-bold">
+            Tools & expertise
           </h2>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Tools and technologies I use to bring ideas to life.
-          </p>
-        </motion.div>
+        </div>
 
-        {/* Skills Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {skills.map((skill, index) => (
-            <motion.div
+            <div
               key={skill.name}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ scale: 1.1, y: -5 }}
+              className="bg-card border border-border/50 p-6 rounded-3xl hover-lift group cursor-default animate-fade-up-scroll h-full"
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <Badge
-                className="px-8 py-4 text-base font-semibold rounded-full shadow-card hover:shadow-elegant transition-all duration-300 cursor-default"
-                variant="outline"
-              >
-                <span className="mr-2">{skill.name}</span>
-                <span className="text-xs text-muted-foreground">• {skill.level}</span>
-              </Badge>
-            </motion.div>
+              <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
+                <skill.icon className="w-6 h-6 text-accent" />
+              </div>
+              <h3 className="font-semibold mb-1">{skill.name}</h3>
+              <p className="text-sm text-muted-foreground">{skill.description}</p>
+            </div>
           ))}
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default SkillsSection;

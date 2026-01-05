@@ -16,7 +16,7 @@ export default function Hero() {
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Animated Mesh Gradient Background */}
       <div className="absolute inset-0 mesh-gradient opacity-40" />
-      
+
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-32 sm:py-40">
         <div className="text-center space-y-8">
@@ -40,8 +40,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
           >
-            UI/UX Designer & Frontend Developer crafting premium digital experiences
-            with pixel-perfect precision and delightful interactions.
+            Designer + Creator — Crafting Minimal, Meaningful Designs
           </motion.p>
 
           {/* CTA Button - Magnetic Effect */}

@@ -5,8 +5,8 @@ import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
-    title: "Emergent | Fullstack App",
-    description: "A product of emergent.sh",
+    title: "Arrows Design",
+    description: "Portfolio of Arrows Design - A multi-disciplinary designer crafting minimal, meaningful digital experiences. UI/UX, Brand Identity & Motion Design.",
 };
 
 export default function RootLayout({
@@ -19,8 +19,9 @@ export default function RootLayout({
             <body>
                 <ThemeProvider
                     attribute="class"
-                    defaultTheme="light"
+                    defaultTheme="dark"
                     enableSystem={false}
+                    forcedTheme="dark"
                 >
                     <div className="min-h-screen bg-background text-foreground">
                         <Navigation />
