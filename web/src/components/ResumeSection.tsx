@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Download, Briefcase, GraduationCap } from "lucide-react";
+import { Badge } from './ui/badge';
+import { Download, Laptop, GraduationCap, Briefcase } from 'lucide-react';
 
 const experience = [
     {
@@ -85,7 +86,9 @@ const ResumeSection = () => {
                                         <span className="text-xs text-accent font-medium">{item.period}</span>
                                         <h4 className="text-lg font-semibold mt-2 group-hover:text-accent transition-colors">{item.title}</h4>
                                         <p className="text-muted-foreground text-sm mt-1">{item.company}</p>
-                                        <p className="text-muted-foreground text-sm mt-3">{item.description}</p>
+                                        <p className="text-muted-foreground leading-relaxed">
+                                            {item.description}
+                                        </p>
                                     </div>
                                 </div>
                             ))}

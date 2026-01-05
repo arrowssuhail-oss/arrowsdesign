@@ -1,4 +1,5 @@
 import { Palette, Layout, PenTool, Monitor, Layers, Sparkles, Video } from "lucide-react";
+import { db } from "@/lib/storage";
 
 const skills = [
   { name: "Adobe Creative Suite", icon: PenTool, description: "Photoshop, Illustrator & more" },
@@ -33,7 +34,9 @@ const SkillsSection = () => {
                 <skill.icon className="w-6 h-6 text-accent" />
               </div>
               <h3 className="font-semibold mb-1">{skill.name}</h3>
-              <p className="text-sm text-muted-foreground">{skill.description}</p>
+              <p className="text-sm text-muted-foreground">
+                {skill.description}
+              </p>
             </div>
           ))}
         </div>

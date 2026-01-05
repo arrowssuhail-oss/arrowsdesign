@@ -183,7 +183,9 @@ const ProjectCard = ({ project }: { project: any }) => {
                     transform: `translateZ(50px)`,
                     transformStyle: 'preserve-3d'
                 }}>
-                    <h3 className="text-2xl md:text-3xl font-bold">{project.title}</h3>
+                    <h3 className="text-2xl md:text-3xl font-bold">
+                        {project.title}
+                    </h3>
                 </div>
 
                 {/* Floating Icon */}

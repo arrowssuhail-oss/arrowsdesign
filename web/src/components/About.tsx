@@ -1,4 +1,6 @@
 import React from "react";
+import GlareHover from "./GlareHover";
+import ShinyText from "./ShinyText";
 
 const About = () => {
     return (
@@ -8,12 +10,21 @@ const About = () => {
                     {/* Image side */}
                     <div className="relative">
                         <div className="aspect-[4/5] rounded-3xl bg-gradient-to-br from-accent/20 via-muted to-secondary overflow-hidden animate-fade-up-scroll">
-                            <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
-                            <img
-                                src="/1000103443.png"
-                                alt="Profile"
-                                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
-                            />
+                            <GlareHover
+                                width="100%"
+                                height="100%"
+                                borderRadius="1.875rem"
+                                borderColor="transparent"
+                                background="transparent"
+                                className="w-full h-full"
+                            >
+                                <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
+                                <img
+                                    src="/1000103443.png"
+                                    alt="Profile"
+                                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                                />
+                            </GlareHover>
                         </div>
                         {/* Floating card */}
                         <div className="absolute -bottom-6 -right-6 bg-card shadow-2xl p-6 max-w-[240px] rounded-3xl border border-border/10">
@@ -25,21 +36,32 @@ const About = () => {
                     {/* Content side */}
                     <div>
                         <span className="text-accent text-sm font-medium uppercase tracking-widest block animate-fade-up-scroll">About Me</span>
-                        <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-8 animate-fade-up-scroll">
-                            Designing Visions, Editing Realities
+                        <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-8 leading-tight animate-fade-up-scroll">
+                            <ShinyText
+                                text="Designing Visions, Editing Realities"
+                                speed={3}
+                                color="rgba(255, 255, 255, 0.8)"
+                                shineColor="#3b82f6"
+                                className="py-2"
+                            />
                         </h2>
                         <div className="space-y-6 text-muted-foreground text-lg leading-relaxed">
-                            <p className="animate-fade-up-scroll">
-                                Hello! I’m Muhammed Suhail K, a self-taught and passionate Graphic Designer and Video Editor based
-                                in Malappuram, Kerala, India. I have created Numerous Social Media creatives and Printable works,
-                                Continually Learning and Researching to Expand my expertise. My exploration spans various fields of
-                                graphic design, including Video Editing
-                            </p>
-                            <p className="animate-fade-up-scroll">
-                                As a designer, I excel at creating innovative designs and delivering compelling presentations.
-                                My passion also extends to mentoring and instructing aspiring graphic designers, helping them
-                                develop their skills and achieve their creative potential.
-                            </p>
+                            <div className="animate-fade-up-scroll">
+                                <ShinyText
+                                    text="Hello! I’m Muhammed Suhail K, a self-taught and passionate Graphic Designer and Video Editor based in Malappuram, Kerala, India. I have created Numerous Social Media creatives and Printable works, Continually Learning and Researching to Expand my expertise. My exploration spans various fields of graphic design, including Video Editing"
+                                    speed={5}
+                                    color="rgba(255, 255, 255, 0.6)"
+                                    shineColor="#ffffff"
+                                />
+                            </div>
+                            <div className="animate-fade-up-scroll">
+                                <ShinyText
+                                    text="As a designer, I excel at creating innovative designs and delivering compelling presentations. My passion also extends to mentoring and instructing aspiring graphic designers, helping them develop their skills and achieve their creative potential."
+                                    speed={5}
+                                    color="rgba(255, 255, 255, 0.6)"
+                                    shineColor="#ffffff"
+                                />
+                            </div>
                         </div>
 
                         <div className="mt-10 pt-10 border-t border-border animate-fade-up-scroll">

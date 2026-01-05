@@ -145,13 +145,20 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="space-y-8"
           >
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold tracking-tight">Get in Touch</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Whether you have a question, want to discuss a project, or just want to say hi,
-                I'll try my best to get back to you as soon as possible!
+            <motion.div
+              className="space-y-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h3 className="text-2xl font-bold tracking-tight text-left">
+                Get in Touch
+              </h3>
+              <p className="text-muted-foreground leading-relaxed text-left">
+                Whether you have a question, want to discuss a project, or just want to say hi, I'll try my best to get back to you as soon as possible!
               </p>
-            </div>
+            </motion.div>
 
             {/* Contact Details */}
             <div className="space-y-4">

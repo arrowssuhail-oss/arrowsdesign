@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Button } from './ui/button';
+import LiquidEther from './LiquidEther';
 
 export default function Hero() {
   const scrollToContact = () => {
@@ -14,8 +15,14 @@ export default function Hero() {
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated Mesh Gradient Background */}
-      <div className="absolute inset-0 mesh-gradient opacity-40" />
+      {/* Interactive Liquid Ether Background */}
+      <div className="absolute inset-0 opacity-60">
+        <LiquidEther
+          colors={['#0062FF', '#00A3FF', '#00E0FF']}
+          mouseForce={25}
+          cursorSize={120}
+        />
+      </div>
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-32 sm:py-40">
