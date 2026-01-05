@@ -30,9 +30,9 @@ export default function Contact() {
   };
 
   const contactInfo = [
-    { icon: Mail, label: 'Email', value: 'hello@portfolio.com' },
-    { icon: Phone, label: 'Phone', value: '+1 (555) 123-4567' },
-    { icon: MapPin, label: 'Location', value: 'San Francisco, CA' },
+    { icon: Mail, label: 'Email', value: 'arrows.suhail@gmail.com' },
+    { icon: Phone, label: 'Phone', value: '+91 9567438507' },
+    { icon: MapPin, label: 'Location', value: 'Malappuram, Kerala' },
   ];
 
   return (
@@ -62,7 +62,7 @@ export default function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <Card className="rounded-2xl border-border/50 shadow-elegant">
+            <Card className="rounded-[2.5rem] border-border/50 shadow-elegant bg-card hover-lift transition-all duration-500 hover:border-accent/30">
               <CardContent className="p-8">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Name Field */}
@@ -128,7 +128,7 @@ export default function Contact() {
                   <Button
                     type="submit"
                     size="lg"
-                    className="w-full rounded-xl text-base font-semibold"
+                    className="w-full rounded-2xl text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground shadow-glow-accent transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
                   >
                     Send Message
                   </Button>
@@ -163,14 +163,14 @@ export default function Contact() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <Card className="rounded-xl border-border/50 hover:border-primary/30 transition-all duration-300">
-                    <CardContent className="p-6 flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <item.icon className="h-6 w-6 text-primary" />
+                  <Card className="rounded-3xl border-border/50 hover:border-accent/30 transition-all duration-500 bg-card hover-lift group">
+                    <CardContent className="p-6 flex items-center gap-5">
+                      <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors duration-300">
+                        <item.icon className="h-7 w-7 text-accent" />
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">{item.label}</p>
-                        <p className="font-medium">{item.value}</p>
+                        <p className="text-sm text-muted-foreground mb-1">{item.label}</p>
+                        <p className="text-lg font-medium group-hover:text-accent transition-colors duration-300">{item.value}</p>
                       </div>
                     </CardContent>
                   </Card>
