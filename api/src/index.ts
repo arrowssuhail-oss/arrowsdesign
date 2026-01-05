@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { StatusCheck } from './models/StatusCheck.js';
+// import { StatusCheck } from './models/StatusCheck.js';
 
 
 // Load environment variables
@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 8000;
 
 // Middleware
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:8000', 'http://127.0.0.1:8000'],
     credentials: true,
 }));
 app.use(express.json());
@@ -35,9 +35,9 @@ router.post('/status', async (req: Request, res: Response) => {
     try {
         const { client_name } = req.body;
 
-        const newStatus = new StatusCheck({ client_name });
-        const savedStatus = await newStatus.save();
-        res.json(savedStatus);
+        // const newStatus = new StatusCheck({ client_name });
+        // const savedStatus = await newStatus.save();
+        res.json({ message: "Status logging disabled" });
     } catch (error) {
         console.error('Error creating status check:', error);
         res.status(500).json({ error: 'Failed to create status check', details: error instanceof Error ? error.message : String(error) });
@@ -46,8 +46,8 @@ router.post('/status', async (req: Request, res: Response) => {
 
 router.get('/status', async (req: Request, res: Response) => {
     try {
-        const statusChecks = await StatusCheck.find().sort({ timestamp: -1 }).limit(100);
-        res.json(statusChecks);
+        // const statusChecks = await StatusCheck.find().sort({ timestamp: -1 }).limit(100);
+        res.json([]);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch status checks' });
     }
