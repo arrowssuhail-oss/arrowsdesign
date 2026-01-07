@@ -203,74 +203,9 @@ const ProjectCard = ({ project }: { project: any }) => {
     );
 };
 
-const Projects = () => {
-    const [projects, setProjects] = useState<any[]>(() => {
-        if (typeof window === 'undefined') return defaultProjects;
-        const stored = localStorage.getItem("arrows_projects_data");
-        return stored ? JSON.parse(stored) : defaultProjects;
-    });
-
-    useEffect(() => {
-        const loadProjectImages = async () => {
-            try {
-                // Use the list from state/localStorage
-                const currentProjects = projects.length > 0 ? projects : defaultProjects;
-
-                const updatedProjects = await Promise.all(
-                    currentProjects.map(async (project) => {
-                        const content = await db.getItem<any>(`arrows_page_content_${project.id}`);
-                        if (content) {
-                            // Collect valid images: Hero + Gallery
-                            const gallery = (content.gallery || []).filter((dbImg: string) => dbImg && !dbImg.includes('antigravity-hero.png'));
-                            const hero = (content.heroImage && !content.heroImage.includes('antigravity-hero.png')) ? content.heroImage : null;
-
-                            let images = [];
-                            if (hero) images.push(hero);
-                            if (gallery.length > 0) images = [...images, ...gallery];
-
-                            // Deduplicate
-                            images = Array.from(new Set(images));
-
-                            // Prioritize heroImage, then first gallery image for single display fallback
-                            const image = images.length > 0 ? images[0] : null;
-
-                            if (image || images.length > 0) { // Ensure we return if images array is populated, even if 'image' (first one) is null
-                                return { ...project, image, images };
-                            }
-                        }
-                        return project;
-                    })
-                );
-                setProjects(updatedProjects);
-            } catch (error) {
-                console.error("Failed to load project images:", error);
-            }
-        };
-
-        loadProjectImages();
-
-        // Listen for updates
-        const handleUpdate = () => {
-            const stored = localStorage.getItem("arrows_projects_data");
-            if (stored) {
-                setProjects(JSON.parse(stored));
-            }
-            loadProjectImages();
-        };
-        window.addEventListener('project-update', handleUpdate);
-
-        const projectList = projects.length > 0 ? projects : defaultProjects;
-        projectList.forEach(p => {
-            window.addEventListener(`page-content-update-${p.id}`, handleUpdate);
-        });
-
-        return () => {
-            window.removeEventListener('project-update', handleUpdate);
-            projectList.forEach(p => {
-                window.removeEventListener(`page-content-update-${p.id}`, handleUpdate);
-            });
-        };
-    }, []);
+const Projects = ({ projects = [] }) => {
+    // Fallback to default if empty, or just use passed projects
+    const displayProjects = projects.length > 0 ? projects : defaultProjects;
 
     return (
         <section id="works" className="py-20">
@@ -286,8 +221,8 @@ const Projects = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                    {projects.map((project, index) => (
-                        <ProjectCard key={project.id} project={project} />
+                    {displayProjects.map((project: any, index: number) => (
+                        <ProjectCard key={project._id || project.id} project={project} />
                     ))}
                 </div>
             </div>
