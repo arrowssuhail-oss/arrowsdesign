@@ -1,5 +1,6 @@
 
-import { createStory, getStories, deleteStory, archiveStory } from "@/actions/stories";
+import { getStories, deleteStory, archiveStory } from "@/actions/stories";
+import CreateStoryForm from "./CreateStoryForm";
 import { Button } from "@/components/ui/button"; // Assuming shadcn or similar exists, else standard html button
 import { redirect } from "next/navigation";
 
@@ -21,37 +22,7 @@ export default async function StoriesPage() {
             {/* Upload Form - Simple Implementation */}
             <div className="rounded-lg border bg-white p-6 shadow-sm">
                 <h2 className="mb-4 text-lg font-semibold">Upload New Story</h2>
-                <form action={createStory} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Media URL</label>
-                        <input
-                            name="mediaUrl"
-                            type="url"
-                            placeholder="https://..."
-                            required
-                            className="w-full rounded border p-2"
-                        />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Type</label>
-                            <select name="mediaType" className="w-full rounded border p-2">
-                                <option value="image">Image</option>
-                                <option value="video">Video</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Caption</label>
-                            <input name="caption" type="text" className="w-full rounded border p-2" />
-                        </div>
-                    </div>
-                    <button
-                        type="submit"
-                        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                    >
-                        Post Story
-                    </button>
-                </form>
+                <CreateStoryForm />
             </div>
 
             {/* Stories List */}
