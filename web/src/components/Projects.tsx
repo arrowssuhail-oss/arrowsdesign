@@ -203,7 +203,19 @@ const ProjectCard = ({ project }: { project: any }) => {
     );
 };
 
-const Projects = ({ projects = [] }) => {
+interface ProjectType {
+    id: number | string;
+    title: string;
+    category: string;
+    color: string;
+    iconName: string;
+    shapes: string[];
+    link: string;
+    images?: string[];
+    image?: string | null;
+}
+
+const Projects = ({ projects = [] }: { projects?: ProjectType[] }) => {
     // Fallback to default if empty, or just use passed projects
     const displayProjects = projects.length > 0 ? projects : defaultProjects;
 
@@ -222,7 +234,7 @@ const Projects = ({ projects = [] }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                     {displayProjects.map((project: any, index: number) => (
-                        <ProjectCard key={project._id || project.id} project={project} />
+                        <ProjectCard key={project.id || project._id} project={project} />
                     ))}
                 </div>
             </div>
