@@ -9,8 +9,12 @@ export async function GET() {
         await connectToDatabase();
 
         // Hardcoded credentials for the prompt
-        const email = "arrows.suhail@gmail.com";
-        const password = "9567@Suhail";
+        const email = process.env.ADMIN_EMAIL;
+        const password = process.env.ADMIN_PASSWORD;
+
+        if (!password) {
+            return NextResponse.json({ success: false, error: "ADMIN_PASSWORD not set in env" }, { status: 500 });
+        }
 
         const hashedPassword = await hashPassword(password);
 
