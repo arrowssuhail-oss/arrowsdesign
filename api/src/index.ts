@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import connectToDatabase from './lib/db.js';
 import seedRouter from './routers/seedRouter.js';
+import imageKitRouter from './routers/imageKitRouter.js';
 import projectRouter from './routers/projectRouter.js';
 import storyRouter from './routers/storyRouter.js';
 import authRouter from './routers/authRouter.js';
@@ -37,6 +38,7 @@ router.use('/seed', seedRouter);
 router.use('/projects', projectRouter);
 router.use('/stories', storyRouter);
 router.use('/auth', authRouter);
+router.use('/imagekit', imageKitRouter);
 
 app.use('/api', router);
 
