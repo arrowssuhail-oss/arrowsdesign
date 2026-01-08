@@ -45,7 +45,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { iconMap, defaultProjects } from "@/components/ProjectsSection";
 import { defaultPageContent, ProjectPageData } from "@/components/projectData";
 import { logout } from "@/actions/auth"; // Import server action
+import { createStory } from "@/actions/stories";
 import { format } from "date-fns";
+import ImageUpload from "@/components/ImageUpload";
 
 // Mock Auth Hook for Client Component
 const useAuth = () => {
@@ -238,57 +240,49 @@ export default function Dashboard() {
         }
     }, []);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement> | React.DragEvent) => {
-        let file: File | undefined;
 
-        if ((e as React.DragEvent).dataTransfer) {
-            e.preventDefault();
-            file = (e as React.DragEvent).dataTransfer.files[0];
-        } else if ((e as React.ChangeEvent<HTMLInputElement>).target) {
-            file = (e as React.ChangeEvent<HTMLInputElement>).target.files?.[0];
-        }
-
-        if (file) {
-            if (file.size > 5 * 1024 * 1024) {
-                toast({ title: "File too large", description: "Please use an image under 5MB for this demo.", variant: "destructive" });
-                return;
-            }
-
-            if (!file.type.startsWith('image/')) {
-                toast({ title: "Invalid file", description: "Please upload an image file.", variant: "destructive" });
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setStoryUrl(reader.result as string);
-                toast({ title: "Image Loaded", description: "Click Update Story to save changes." });
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const handleDragOver = (e: React.DragEvent) => {
-        e.preventDefault();
-    };
 
     const handleUpdateStory = async () => {
         if (!storyUrl) return;
 
-        const storyData = {
-            content: storyUrl,
-            type: 'image' as const,
-            timestamp: Date.now(),
-            active: true
-        };
-
         try {
-            // Local update
-            localStorage.setItem("arrows_story_data", JSON.stringify(storyData));
-            toast({ title: "Story Live!", description: "Updated locally." });
-            window.location.reload();
+            setIsSaving(true);
+            const formData = new FormData();
+            formData.append("mediaUrl", storyUrl);
+            formData.append("mediaType", "image");
+            formData.append("caption", "Uploaded from Dashboard");
+
+            const result = await createStory(null, formData);
+
+            if (result.message.includes("success")) {
+                toast({ title: "Story Live!", description: "Updated on cloud and database." });
+
+                // Also update local state for immediate feedback before reload
+                const storyData = {
+                    content: storyUrl,
+                    type: 'image' as const,
+                    timestamp: Date.now(),
+                    active: true
+                };
+                localStorage.setItem("arrows_story_data", JSON.stringify(storyData));
+
+                window.location.reload();
+            } else {
+                toast({
+                    title: "Update Failed",
+                    description: result.message,
+                    variant: "destructive"
+                });
+            }
         } catch (error) {
             console.error("Story update failed", error);
+            toast({
+                title: "Error",
+                description: "Failed to connect to server",
+                variant: "destructive"
+            });
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -594,23 +588,10 @@ export default function Dashboard() {
                                     <div className="flex-1 space-y-4">
                                         <div className="space-y-4">
                                             <Label htmlFor="story-url">Image Source</Label>
-                                            <div
-                                                className="border-2 border-dashed border-border/50 rounded-xl p-6 text-center hover:bg-accent/5 hover:border-accent/50 transition-colors cursor-pointer relative"
-                                                onDrop={handleFileChange}
-                                                onDragOver={handleDragOver}
-                                                onClick={() => document.getElementById('file-upload')?.click()}
-                                            >
-                                                <input
-                                                    type="file"
-                                                    id="file-upload"
-                                                    className="hidden"
-                                                    accept="image/*"
-                                                    onChange={handleFileChange}
-                                                />
-                                                <Upload className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
-                                                <p className="text-sm font-medium">Click or Drag & Drop to Upload</p>
-                                                <p className="text-xs text-muted-foreground mt-1">Supports JPG, PNG (Max 5MB)</p>
-                                            </div>
+                                            <ImageUpload
+                                                folder="/stories"
+                                                onSuccess={(url) => setStoryUrl(url)}
+                                            />
 
                                             <div className="space-y-1">
                                                 <Input

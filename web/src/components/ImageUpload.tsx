@@ -102,14 +102,6 @@ export default function ImageUpload({ onSuccess, className, folder }: ImageUploa
                         </div>
                     )}
                 </label>
-
-                {/* Debug Info - Remove after fixing */}
-                <div className="mt-2 p-2 bg-gray-100 rounded text-xs text-gray-600 break-all">
-                    <p className="font-bold text-red-500 mb-1">DEBUG INFO (Verify this matches your Dashboard):</p>
-                    <p><strong>Configured Endpoint:</strong> {urlEndpoint}</p>
-                    <p><strong>Configured Public Key:</strong> {publicKey}</p>
-                    <p><strong>Target Folder:</strong> {folder || '(root)'}</p>
-                </div>
             </div>
         </IKContext>
     );
