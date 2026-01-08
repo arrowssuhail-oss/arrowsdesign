@@ -1,8 +1,6 @@
 
 import { redirect } from "next/navigation";
-import connectToDatabase from "@/lib/db";
-import User from "@/models/User";
-import { getSession } from "@/lib/auth";
+import { getSession } from "../../lib/auth";
 import React from "react";
 
 export default async function DashboardLayout({
@@ -17,13 +15,6 @@ export default async function DashboardLayout({
     }
 
     const email = session.email;
-
-    await connectToDatabase();
-    const authorizedUser = await User.findOne({ email });
-
-    if (!authorizedUser) {
-        redirect("/dashboard/unauthorized");
-    }
 
     return (
         <div className="flex h-screen w-full flex-col">

@@ -1,44 +1,39 @@
 
 'use server';
 
-import connectToDatabase from "@/lib/db";
-import Story, { IStory } from "@/models/Story";
 import { revalidatePath } from "next/cache";
 
-// Helper to serialize Mongoose doc
-const serialize = (doc: any) => {
-    const { _id, ...rest } = doc.toObject ? doc.toObject() : doc;
-    return { _id: _id.toString(), ...rest };
-};
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 export async function getStories() {
-    await connectToDatabase();
-    const stories = await Story.find({}).sort({ createdAt: -1 });
-    return stories.map(serialize);
+    try {
+        const res = await fetch(`${API_URL}/stories`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch stories');
+        return await res.json();
+    } catch (error) {
+        console.error("Error fetching stories:", error);
+        return [];
+    }
 }
 
 export async function createStory(prevState: any, formData: FormData) {
-    await connectToDatabase();
-
     const mediaUrl = formData.get("mediaUrl") as string;
     const mediaType = formData.get("mediaType") as string;
     const caption = formData.get("caption") as string;
 
-    // Basic validation
     if (!mediaUrl) {
         return { message: "Media URL is required" };
     }
 
-    // Calculate expiration (24 hours from now)
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
-
     try {
-        await Story.create({
-            mediaUrl,
-            mediaType: mediaType || 'image',
-            caption,
-            expiresAt
+        const res = await fetch(`${API_URL}/stories`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mediaUrl, mediaType, caption })
         });
+
+        if (!res.ok) throw new Error('Failed to create story');
+
         revalidatePath("/dashboard/stories");
         return { message: "Story created successfully" };
     } catch (e) {
@@ -47,13 +42,19 @@ export async function createStory(prevState: any, formData: FormData) {
 }
 
 export async function deleteStory(id: string) {
-    await connectToDatabase();
-    await Story.findByIdAndDelete(id);
-    revalidatePath("/dashboard/stories");
+    try {
+        await fetch(`${API_URL}/stories/${id}`, { method: 'DELETE' });
+        revalidatePath("/dashboard/stories");
+    } catch (e) {
+        console.error("Failed to delete story:", e);
+    }
 }
 
 export async function archiveStory(id: string) {
-    await connectToDatabase();
-    await Story.findByIdAndUpdate(id, { status: 'archived' });
-    revalidatePath("/dashboard/stories");
+    try {
+        await fetch(`${API_URL}/stories/${id}/archive`, { method: 'PATCH' });
+        revalidatePath("/dashboard/stories");
+    } catch (e) {
+        console.error("Failed to archive story:", e);
+    }
 }
