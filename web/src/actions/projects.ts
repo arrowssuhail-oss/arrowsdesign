@@ -10,8 +10,11 @@ export async function getProjects() {
         const res = await fetch(`${API_URL}/projects`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch projects');
         return await res.json();
-    } catch (error) {
-        console.error("Error fetching projects:", error);
+    } catch (error: any) {
+        console.error("Error fetching projects:");
+        console.error("  Raw API_URL:", API_URL);
+        console.error("  Target URL:", `${API_URL}/projects`);
+        console.error("  Error Details:", error.message, error.cause);
         return [];
     }
 }

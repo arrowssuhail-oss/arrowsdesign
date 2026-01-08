@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from '@/components/ui/dialog';
 
 interface StoryViewerProps {
     isOpen: boolean;
@@ -13,6 +13,7 @@ const StoryViewer: React.FC<StoryViewerProps> = ({ isOpen, onClose, storyData })
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-md bg-black border-none text-white p-0 overflow-hidden">
+                <DialogTitle className="sr-only">Story Content</DialogTitle>
                 <div className="relative w-full h-[80vh] flex items-center justify-center">
                     <img
                         src={storyData.content}
