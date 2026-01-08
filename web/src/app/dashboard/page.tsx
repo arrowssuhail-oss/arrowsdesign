@@ -40,6 +40,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 
 import { iconMap, defaultProjects } from "@/components/ProjectsSection";
 import { defaultPageContent, ProjectPageData } from "@/components/projectData";
@@ -116,9 +117,15 @@ export default function Dashboard() {
     }, [user]);
 
     const [displayName, setDisplayName] = useState("");
+    const [bio, setBio] = useState("");
+    const [website, setWebsite] = useState("");
 
     useEffect(() => {
-        if (user) setDisplayName(user.name || user.email.split('@')[0]);
+        if (user) {
+            setDisplayName(user.name || user.email.split('@')[0]);
+            setBio("Creative Director at Arrows Design. Passionate about minimalism and typography.");
+            setWebsite("https://arrows.design");
+        }
     }, [user]);
 
     const [isSaving, setIsSaving] = useState(false);
@@ -437,7 +444,7 @@ export default function Dashboard() {
                     {/* Header */}
                     <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                         <div>
-                            <span className="text-accent text-sm font-medium uppercase tracking-widest">Workspace</span>
+                            <span className="text-accent text-sm font-medium uppercase tracking-widest">Admin Dashboard</span>
                             <h1 className="text-4xl md:text-5xl font-bold mt-2">Welcome, {user.email.split('@')[0]}</h1>
                             <p className="text-muted-foreground mt-2">Manage your creative projects and studio settings.</p>
                         </div>
@@ -471,6 +478,12 @@ export default function Dashboard() {
                                         <div className="space-y-4">
                                             <h4 className="text-sm font-medium uppercase tracking-wider text-muted-foreground">Profile</h4>
                                             <div className="grid gap-4">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center overflow-hidden">
+                                                        <UserIcon className="w-8 h-8 text-accent" />
+                                                    </div>
+                                                    <Button variant="outline" size="sm">Change Avatar</Button>
+                                                </div>
                                                 <div className="grid gap-2">
                                                     <Label htmlFor="name">Display Name</Label>
                                                     <Input
@@ -480,8 +493,42 @@ export default function Dashboard() {
                                                     />
                                                 </div>
                                                 <div className="grid gap-2">
+                                                    <Label htmlFor="bio">Bio</Label>
+                                                    <Textarea
+                                                        id="bio"
+                                                        value={bio}
+                                                        onChange={(e) => setBio(e.target.value)}
+                                                        className="resize-none h-24"
+                                                    />
+                                                </div>
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor="website">Website</Label>
+                                                    <Input
+                                                        id="website"
+                                                        value={website}
+                                                        onChange={(e) => setWebsite(e.target.value)}
+                                                        placeholder="https://..."
+                                                    />
+                                                </div>
+                                                <div className="grid gap-2">
                                                     <Label htmlFor="email">Email Address</Label>
                                                     <Input id="email" defaultValue={user.email} disabled />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <Separator />
+
+                                        <div className="space-y-4">
+                                            <h4 className="text-sm font-medium uppercase tracking-wider text-muted-foreground">Security</h4>
+                                            <div className="grid gap-4">
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor="current-password">Current Password</Label>
+                                                    <Input id="current-password" type="password" />
+                                                </div>
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor="new-password">New Password</Label>
+                                                    <Input id="new-password" type="password" />
                                                 </div>
                                             </div>
                                         </div>
