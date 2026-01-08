@@ -80,7 +80,7 @@ const useAuth = () => {
 };
 
 // Simplified Footer Mock
-const Footer = () => <footer className="p-6 text-center text-sm text-muted-foreground">© 2026 Arrows Design</footer>;
+const Footer = () => <footer className="p-6 text-center text-sm text-muted-foreground">© Arrows Design. All rights reserved.</footer>;
 
 export default function Dashboard() {
     const { user, logout, getAllUsers } = useAuth(); // Wrapped useAuth
