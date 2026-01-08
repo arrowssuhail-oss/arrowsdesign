@@ -2,6 +2,7 @@
 
 import { useActionState } from 'react';
 import { createStory } from "@/actions/stories";
+import ImageUpload from "@/components/ImageUpload";
 
 const initialState = {
     message: '',
@@ -18,13 +19,20 @@ export default function CreateStoryForm() {
                 </div>
             )}
             <div>
-                <label className="block text-sm font-medium mb-1">Media URL</label>
+                <label className="block text-sm font-medium mb-1">Image Source</label>
+                {/* Image Upload Component */}
+                <ImageUpload
+                    folder="/stories"
+                    onSuccess={(url) => {
+                        const input = document.getElementById('media-url-input') as HTMLInputElement;
+                        if (input) input.value = url;
+                    }} />
+                {/* Hidden input to store the URL for server action */}
                 <input
+                    id="media-url-input"
                     name="mediaUrl"
-                    type="url"
-                    placeholder="https://..."
+                    type="hidden"
                     required
-                    className="w-full rounded border p-2"
                 />
             </div>
             <div className="grid grid-cols-2 gap-4">

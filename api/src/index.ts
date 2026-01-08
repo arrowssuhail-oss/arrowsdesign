@@ -1,12 +1,12 @@
+import 'dotenv/config'; // Load env vars before anything else
 import express, { Request, Response } from 'express';
-import * as mongoose from 'mongoose';
 import cors from 'cors';
-import dotenv from 'dotenv';
-// import { StatusCheck } from './models/StatusCheck.js';
-
-
-// Load environment variables
-dotenv.config();
+import connectToDatabase from './lib/db.js';
+import seedRouter from './routers/seedRouter.js';
+import imageKitRouter from './routers/imageKitRouter.js';
+import projectRouter from './routers/projectRouter.js';
+import storyRouter from './routers/storyRouter.js';
+import authRouter from './routers/authRouter.js';
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -19,10 +19,12 @@ app.use(cors({
 app.use(express.json());
 
 // MongoDB Connection
-const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/mybase';
-mongoose.connect(mongoUrl)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch((err) => console.error('MongoDB connection error:', err));
+connectToDatabase()
+    .then(() => console.log('Connected to MongoDB via lib/db'))
+    .catch((err) => {
+        console.error('MongoDB connection error:', err);
+        process.exit(1);
+    });
 
 // Routes
 const router = express.Router();
@@ -31,27 +33,12 @@ router.get('/', (req: Request, res: Response) => {
     res.json({ message: 'Hello World' });
 });
 
-router.post('/status', async (req: Request, res: Response) => {
-    try {
-        const { client_name } = req.body;
-
-        // const newStatus = new StatusCheck({ client_name });
-        // const savedStatus = await newStatus.save();
-        res.json({ message: "Status logging disabled" });
-    } catch (error) {
-        console.error('Error creating status check:', error);
-        res.status(500).json({ error: 'Failed to create status check', details: error instanceof Error ? error.message : String(error) });
-    }
-});
-
-router.get('/status', async (req: Request, res: Response) => {
-    try {
-        // const statusChecks = await StatusCheck.find().sort({ timestamp: -1 }).limit(100);
-        res.json([]);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch status checks' });
-    }
-});
+// Mount routers
+router.use('/seed', seedRouter);
+router.use('/projects', projectRouter);
+router.use('/stories', storyRouter);
+router.use('/auth', authRouter);
+router.use('/imagekit', imageKitRouter);
 
 app.use('/api', router);
 

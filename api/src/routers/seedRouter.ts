@@ -1,19 +1,18 @@
+import express, { Request, Response, Router } from 'express';
+import User from '../models/User.js';
+import { hashPassword } from '../lib/password.js';
 
-import { NextResponse } from "next/server";
-import connectToDatabase from "@/lib/db";
-import User from "@/models/User";
-import { hashPassword } from "@/lib/password";
+const router: Router = express.Router();
 
-export async function GET() {
+router.get('/', async (req: Request, res: Response) => {
     try {
-        await connectToDatabase();
-
         // Hardcoded credentials for the prompt
         const email = process.env.ADMIN_EMAIL;
         const password = process.env.ADMIN_PASSWORD;
 
-        if (!password) {
-            return NextResponse.json({ success: false, error: "ADMIN_PASSWORD not set in env" }, { status: 500 });
+        if (!email || !password) {
+            res.status(500).json({ success: false, error: "ADMIN_EMAIL or ADMIN_PASSWORD not set in env" });
+            return;
         }
 
         const hashedPassword = await hashPassword(password);
@@ -29,14 +28,17 @@ export async function GET() {
             { upsert: true, new: true }
         );
 
-        return NextResponse.json({
+        res.json({
             success: true,
             message: "Admin seeded successfully with password."
         });
     } catch (error) {
-        return NextResponse.json({
+        console.error("Seeding error:", error);
+        res.status(500).json({
             success: false,
-            error: "Failed to seed: " + error
-        }, { status: 500 });
+            error: "Failed to seed: " + (error instanceof Error ? error.message : String(error))
+        });
     }
-}
+});
+
+export default router;

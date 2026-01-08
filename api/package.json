@@ -10,9 +10,13 @@
     "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "imagekit": "^6.0.0",
+    "jose": "^6.1.3",
     "mongodb": "^7.0.0",
     "mongoose": "^9.1.1"
   },

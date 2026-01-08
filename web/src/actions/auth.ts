@@ -1,12 +1,11 @@
 
 'use server';
 
-import connectToDatabase from "@/lib/db";
-import User from "@/models/User";
-import { encrypt } from "@/lib/auth";
-import { comparePassword } from "@/lib/password";
+import { encrypt } from "../lib/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 export async function login(prevState: any, formData: FormData) {
     const email = formData.get("email") as string;
@@ -16,36 +15,38 @@ export async function login(prevState: any, formData: FormData) {
         return { message: "Email and Password are required" };
     }
 
-    await connectToDatabase();
+    try {
+        const res = await fetch(`${API_URL}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
 
-    const user = await User.findOne({ email });
+        const data = await res.json();
 
-    if (!user) {
-        // Security: Don't reveal user existence
-        return { message: "Invalid credentials" };
+        if (!data.success) {
+            return { message: data.message || "Invalid credentials" };
+        }
+
+        // Create Session with data returned from API
+        const session = await encrypt({
+            email: data.user.email,
+            role: data.user.role,
+            id: data.user.id
+        });
+
+        // Set Cookie
+        (await cookies()).set("session", session, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+            path: "/",
+        });
+
+    } catch (e) {
+        console.error("Login call failed:", e);
+        return { message: "Something went wrong" };
     }
-
-    // If user has no password (migrated from Clerk or seeded without password), fail
-    if (!user.password) {
-        return { message: "Account setup incomplete. Contact admin." };
-    }
-
-    const isValid = await comparePassword(password, user.password);
-
-    if (!isValid) {
-        return { message: "Invalid credentials" };
-    }
-
-    // Create Session
-    const session = await encrypt({ email: user.email, role: user.role, id: user._id.toString() });
-
-    // Set Cookie
-    (await cookies()).set("session", session, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        path: "/",
-    });
 
     redirect("/dashboard");
 }
