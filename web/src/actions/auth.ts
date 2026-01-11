@@ -45,7 +45,7 @@ export async function login(prevState: any, formData: FormData) {
 
     } catch (e) {
         console.error("Login call failed:", e);
-        return { message: "Something went wrong" };
+        return { message: e instanceof Error ? e.message : "Connection failed to backend" };
     }
 
     redirect("/dashboard");
