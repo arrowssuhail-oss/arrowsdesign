@@ -49,7 +49,7 @@ export default async function CMSPage() {
                     </div>
                 ))}
                 {projects.length === 0 && (
-                    <p className="text-gray-500 text-center py-10">No projects found.</p>
+                    <p className="text-gray-500 text-center py-10">No projects found</p>
                 )}
             </div>
         </div>
