@@ -30,7 +30,7 @@ export default function Contact() {
   };
 
   const contactInfo = [
-    { icon: Mail, label: 'Email', value: 'arrows.suhail@gmail.com' },
+    { icon: Mail, label: 'Email', value: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com' },
     { icon: Phone, label: 'Phone', value: '+91 9567438507' },
     { icon: MapPin, label: 'Location', value: 'Malappuram, Kerala' },
   ];

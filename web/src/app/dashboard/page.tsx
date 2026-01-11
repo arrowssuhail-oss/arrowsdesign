@@ -69,7 +69,7 @@ const useAuth = () => {
 
         // Better approach: Pass user as prop to Dashboard component. 
         // But adapting this big file, let's keep it self-contained if possible.
-        setUser({ email: "arrows.suhail@gmail.com", id: "admin_123", name: "Arrows Admin" });
+        setUser({ email: process.env.NEXT_PUBLIC_ADMIN_EMAIL || "admin@example.com", id: "admin_123", name: "Arrows Admin" });
     }, []);
 
     return {
@@ -99,7 +99,7 @@ export default function Dashboard() {
 
         const checkRoleAndRegister = async () => {
             // Hardcode admin check for this UI demo
-            if (user.email === "arrows.suhail@gmail.com") {
+            if (user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
                 setIsAdminState(true);
                 setIsLoadingRole(false);
                 return;
@@ -559,7 +559,7 @@ export default function Dashboard() {
                                 </div>
                                 <h2 className="text-xl font-bold">{user.email}</h2>
                                 <p className="text-sm text-muted-foreground mt-1 underline">
-                                    {user.email === "arrows.suhail@gmail.com" ? "Admin" : "Creative Partner"}
+                                    {user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL ? "Admin" : "Creative Partner"}
                                 </p>
                                 <div className="mt-8 pt-8 border-t border-border/50">
                                     <Button variant="ghost" onClick={logout} className="w-full gap-2 text-rose-500 hover:text-rose-500 hover:bg-rose-500/5">
