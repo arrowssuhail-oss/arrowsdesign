@@ -2,6 +2,8 @@
 import { getProjects, deleteProject } from "@/actions/projects";
 import CreateProjectForm from "./CreateProjectForm";
 
+export const dynamic = 'force-dynamic';
+
 export default async function CMSPage() {
     const projects = await getProjects();
 

@@ -4,6 +4,8 @@ import CreateStoryForm from "./CreateStoryForm";
 import { Button } from "@/components/ui/button"; // Assuming shadcn or similar exists, else standard html button
 import { redirect } from "next/navigation";
 
+export const dynamic = 'force-dynamic';
+
 // Since I am not sure if shadcn components exist in this specific project (package.json has them), 
 // I will use standard HTML/Tailwind for now to be safe, or import if I checked. 
 // web/package.json showed @radix-ui/react-*, class-variance-authority, lucide-react. 
