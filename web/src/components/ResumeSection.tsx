@@ -7,19 +7,19 @@ const experience = [
         title: "Web Designer",
         company: "Arrows.in",
         period: "2025 — Present",
-        description: "Crafted high-conversion digital experiences for Fintech and Healthcare clients, focusing on user accessibility and intuitive UI.",
+        description: "Crafted high-conversion digital experiences for Fintech and Healthcare clients, focusing on user accessibility and intuitive UI",
     },
     {
         title: "Graphic Designer",
         company: "SkillBee",
         period: "2025 — Present",
-        description: "Leading design for core product features and mentoring junior designers.",
+        description: "Leading design for core product features and mentoring junior designers",
     },
     {
         title: "Freelance",
         company: "Arrows.in",
         period: "2023 — Present",
-        description: "Started My Design career creating brand identities and more.",
+        description: "Started My Design career creating brand identities and more",
     },
 ];
 
