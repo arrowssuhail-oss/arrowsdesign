@@ -14,11 +14,11 @@ const navLinks = [{
   name: "About",
   href: "/#about"
 }, {
-  name: "Skills",
-  href: "/#skills"
-}, {
   name: "Projects",
   href: "/#works"
+}, {
+  name: "Skills",
+  href: "/#skills"
 }, {
   name: "Resume",
   href: "/#resume"
@@ -27,7 +27,7 @@ const navLinks = [{
   href: "/#contact"
 }];
 
-const Navbar = () => {
+const Navbar = ({ stories = [] }: { stories?: any[] }) => {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -74,38 +74,43 @@ const Navbar = () => {
   const [hasUnseenStory, setHasUnseenStory] = useState(false);
 
   useEffect(() => {
-    const checkStory = () => {
-      // Logic to check usage of localStorage on client side
-      if (typeof window !== 'undefined') {
-        const stored = localStorage.getItem("arrows_story_data");
-        if (stored) {
-          try {
-            const parsed = JSON.parse(stored);
-            if (parsed.active && (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000)) { // 24h expiry
-              setStoryData(prev => {
-                if (prev?.timestamp === parsed.timestamp) return prev; // No change
-                return parsed;
-              });
+    // Check passed stories prop first
+    if (stories && stories.length > 0) {
+      // Filter for active stories (last 24h)
+      const now = Date.now();
+      const activeStories = stories.filter((s: any) => {
+        const storyTime = new Date(s.createdAt).getTime();
+        return (now - storyTime) < 24 * 60 * 60 * 1000;
+      });
 
-              // Check if seen locally
-              const seenTimestamp = localStorage.getItem("arrows_story_seen");
-              setHasUnseenStory(seenTimestamp !== parsed.timestamp.toString());
-            } else {
-              setStoryData(null);
-            }
-          } catch (e) {
-            console.error("Failed to parse story data", e);
-          }
-        } else {
-          setStoryData(null);
+      if (activeStories.length > 0) {
+        // Sort by date descending
+        activeStories.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        const latestStory = activeStories[0];
+        const latestTimestamp = new Date(latestStory.createdAt).getTime();
+
+        const data = {
+          content: latestStory.mediaUrl,
+          type: latestStory.mediaType === 'video' ? 'video' : 'image',
+          timestamp: latestTimestamp
+        };
+
+        // @ts-ignore
+        setStoryData(data);
+
+        // Check availability in local storage for "seen" status
+        if (typeof window !== 'undefined') {
+          const seenTimestamp = localStorage.getItem("arrows_story_seen");
+          setHasUnseenStory(seenTimestamp !== latestTimestamp.toString());
         }
+      } else {
+        setStoryData(null);
       }
-    };
+    } else {
+      setStoryData(null);
+    }
 
-    checkStory();
-    const interval = setInterval(checkStory, 2000); // Check every 2s for updates
-    return () => clearInterval(interval);
-  }, []);
+  }, [stories]);
 
   const handleStoryClick = () => {
     if (!storyData) return;

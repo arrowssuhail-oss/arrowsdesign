@@ -1,3 +1,4 @@
+"use client";
 import { ArrowLeft, Palette, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/Navigation";
@@ -36,7 +37,7 @@ const Identity = () => {
             {/* Hero Section */}
             <section className="pt-32 pb-16 px-6">
                 <div className="max-w-6xl mx-auto">
-                    <Link href="/#projects" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8">
+                    <Link href="/#works" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8">
                         <ArrowLeft className="w-4 h-4" />
                         Back to Projects
                     </Link>

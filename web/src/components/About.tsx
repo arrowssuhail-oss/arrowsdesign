@@ -35,20 +35,28 @@ const About = () => {
 
                     {/* Content side */}
                     <div>
-                        <span className="text-accent text-sm font-medium uppercase tracking-widest block animate-fade-up-scroll">About Me</span>
+                        <span className="text-accent text-sm font-medium uppercase tracking-widest block animate-fade-up-scroll">Designing Visions, Editing Realities</span>
                         <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-8 leading-tight animate-fade-up-scroll">
                             <ShinyText
-                                text="Designing Visions, Editing Realities"
+                                text="Hello, I am"
                                 speed={3}
                                 color="rgba(255, 255, 255, 0.8)"
                                 shineColor="#3b82f6"
-                                className="py-2"
+                                className="text-3xl md:text-4xl py-0.5"
+                            />
+                            <br />
+                            <ShinyText
+                                text="Muhammed Suhail"
+                                speed={3}
+                                color="rgba(255, 255, 255, 0.8)"
+                                shineColor="#3b82f6"
+                                className="py-0.0001"
                             />
                         </h2>
                         <div className="space-y-6 text-muted-foreground text-lg leading-relaxed">
                             <div className="animate-fade-up-scroll">
                                 <ShinyText
-                                    text="Hello! I’m Muhammed Suhail K, a self-taught and passionate Graphic Designer and Video Editor based in Malappuram, Kerala, India. I have created Numerous Social Media creatives and Printable works, Continually Learning and Researching to Expand my expertise. My exploration spans various fields of graphic design, including Video Editing"
+                                    text=" A self-taught and passionate Graphic Designer and Video Editor based in Malappuram, Kerala, India. I have created Numerous Social Media creatives and Printable works, Continually Learning and Researching to Expand my expertise. My exploration spans various fields of graphic design, including Video Editing"
                                     speed={5}
                                     color="rgba(255, 255, 255, 0.6)"
                                     shineColor="#ffffff"

@@ -23,7 +23,8 @@ export const defaultProjects = [
         color: "from-accent/40 to-accent/10",
         iconName: "ChartNoAxesGantt",
         shapes: ["rounded-lg", "rounded-full", "rounded-md"],
-        link: "/",
+        link: "/project/graphic-design",
+        image: "/projects/identity.png"
     },
     {
         id: 2,
@@ -32,7 +33,8 @@ export const defaultProjects = [
         color: "from-blue-500/30 to-blue-500/5",
         iconName: "PanelsTopLeft",
         shapes: ["rounded-md", "rounded-full", "rounded-lg"],
-        link: "/",
+        link: "/project/web-design",
+        image: "/projects/web-design.png"
     },
     {
         id: 3,
@@ -41,7 +43,8 @@ export const defaultProjects = [
         color: "from-purple-500/30 to-purple-500/5",
         iconName: "PanelsTopLeft",
         shapes: ["rounded-md", "rounded-full", "rounded-lg"],
-        link: "/",
+        link: "/project/ux-design",
+        image: "/projects/ux-design.png"
     },
     {
         id: 4,
@@ -50,7 +53,8 @@ export const defaultProjects = [
         color: "from-violet-500/30 to-violet-500/5",
         iconName: "MonitorSmartphone",
         shapes: ["rounded-2xl", "rounded-lg", "rounded-full"],
-        link: "/",
+        link: "/project/video-editing",
+        image: "/projects/video-editing.png"
     },
 ];
 

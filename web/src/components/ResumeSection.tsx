@@ -25,9 +25,9 @@ const experience = [
 
 const education = [
     {
-        title: "Bachelor's in Commerce",
+        title: "Bachelor in Commerce",
         institution: "Calicut University",
-        period: "2025 — 2029",
+        period: "2025 — Present",
     },
     {
         title: "Commerce",

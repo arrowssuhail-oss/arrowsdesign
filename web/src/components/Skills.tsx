@@ -8,7 +8,7 @@ const skills = [
   { name: "Illustration", icon: PenTool, description: "Custom graphics" },
   { name: "Web Design", icon: Monitor, description: "Google Antigravity" },
   { name: "Design Systems", icon: Layers, description: "Refference" },
-  { name: "AI Tools", icon: Sparkles, description: "Latest AI Tools" },
+  { name: "AI Tools", icon: Sparkles, description: "Latest AI Models" },
   { name: "Video Editing", icon: Video, description: "Premiere Pro, After Effects, DaVinci Resolve" },
 ];
 
