@@ -72,7 +72,7 @@ export default function SignInPage() {
                     </p>
                 </div>
 
-                <div className="bg-black/40 backdrop-blur-3xl border border-white/10 p-10 rounded-[2.5rem] shadow-2xl animate-in scale-95 fade-in duration-700 delay-300 transition-all duration-500 hover:scale-[1.01] hover:border-white/20 hover:shadow-purple-500/10 hover:ring-1 hover:ring-white/10 group/card">
+                <div className="bg-black/40 backdrop-blur-3xl border border-white/20 p-10 rounded-[2.5rem] shadow-[0_0_50px_-12px_rgba(255,255,255,0.25)] animate-in scale-95 fade-in duration-700 delay-300 transition-all duration-500 hover:scale-[1.01] hover:border-white/40 hover:shadow-[0_0_70px_-12px_rgba(255,255,255,0.4)] ring-1 ring-white/10 group/card">
                     <form onSubmit={handleSubmit} className="space-y-7">
                         <div className="space-y-3 group/input">
                             <Label className="text-xs uppercase text-white/70 font-bold tracking-widest ml-1 group-focus-within/input:text-white transition-colors">Username</Label>
