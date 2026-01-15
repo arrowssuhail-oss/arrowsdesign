@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
 
 // Ensure StoryViewer exists or use placeholder
 import StoryViewer from "@/components/StoryViewer";
@@ -171,15 +170,7 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
               {link.name}
             </Link>)}
 
-            {/* Auth Buttons */}
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button variant="ghost" size="sm">Sign In</Button>
-              </SignInButton>
-            </SignedOut>
+            {/* Dark Mode Toggle */}
           </div>
 
           {/* Mobile menu button */}
@@ -195,19 +186,6 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
               {link.name}
             </Link>)}
 
-            <div className="flex items-center justify-between py-2 border-b border-border/50">
-              <span className="text-foreground">Account</span>
-              <div className="flex gap-2">
-                <SignedIn>
-                  <UserButton afterSignOutUrl="/" />
-                </SignedIn>
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <Button variant="ghost" size="sm">Sign In</Button>
-                  </SignInButton>
-                </SignedOut>
-              </div>
-            </div>
 
             <Link href="/#contact" onClick={() => setIsMobileMenuOpen(false)}>
               <Button variant="default" className="mt-2 w-full">
