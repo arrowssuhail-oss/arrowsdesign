@@ -1,6 +1,57 @@
 import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 import User from '../models/User.js';
 import { comparePassword } from '../lib/password.js';
+import { updateUserRole } from '../lib/clerk.js';
+
+export const sync = async (req: Request, res: Response) => {
+    try {
+        const { clerkId, email, name } = req.body;
+
+        if (!clerkId || !email) {
+            return res.status(400).json({ message: 'Missing required fields: clerkId or email' });
+        }
+
+        // Try to find user by clerkId or email
+        let user = await User.findOne({ $or: [{ clerkId }, { email }] });
+
+        if (user) {
+            // Update existing user
+            user.clerkId = clerkId;
+            user.email = email;
+            if (name) user.name = name;
+            await user.save();
+
+            // Ensure Clerk metadata matches DB role (e.g. if manually updated in DB)
+            try {
+                await updateUserRole(clerkId, user.role);
+            } catch (err) {
+                console.error('Failed to sync existing user role', err);
+            }
+        } else {
+            // Create new user
+            user = await User.create({
+                clerkId,
+                email,
+                name,
+                role: 'user', // Default role
+            });
+
+            // Sync initial role to Clerk
+            try {
+                // Determine role from DB (user)
+                await updateUserRole(clerkId, 'user');
+            } catch (err) {
+                console.error('Failed to sync initial role', err);
+            }
+        }
+
+        res.status(200).json({ message: 'User synced successfully', user });
+    } catch (error) {
+        console.error('Error syncing user:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 
 export const login = async (req: Request, res: Response) => {
     try {

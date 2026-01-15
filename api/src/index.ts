@@ -37,8 +37,13 @@ router.get('/', (req: Request, res: Response) => {
 router.use('/seed', seedRouter);
 router.use('/projects', projectRouter);
 router.use('/stories', storyRouter);
+import adminRouter from './routers/adminRouter.js';
+
+// ...
 router.use('/auth', authRouter);
 router.use('/imagekit', imageKitRouter);
+router.use('/admin', adminRouter);
+// router.use('/debug', debugRouter); // Removed
 
 app.use('/api', router);
 
