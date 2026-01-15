@@ -68,7 +68,7 @@ export default function SignInPage() {
                         Welcome Back
                     </h1>
                     <p className="text-white/80 text-sm font-light animate-in slide-in-from-bottom-4 fade-in duration-700 delay-200">
-                        Enter your credentials to access the command center.
+                        Enter your credentials to access to Admin Panel
                     </p>
                 </div>
 
