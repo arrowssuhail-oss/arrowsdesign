@@ -13,7 +13,7 @@ import {
     Bell,
     LogOut,
     ChevronRight,
-    ExternalLink,
+
     Plus,
     History,
     ShieldCheck,
