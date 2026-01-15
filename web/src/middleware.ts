@@ -8,31 +8,13 @@ const isProtectedRoute = createRouteMatcher([
 
 const isAdminRoute = createRouteMatcher([
     '/dashboard(.*)',
+
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
     // 1. Protect dashboard routes
     if (isAdminRoute(req)) {
-        // Redirect to sign-in if not authenticated
-        const { userId, sessionClaims, redirectToSignIn } = await auth();
-
-        if (!userId) {
-            return redirectToSignIn({ returnBackUrl: req.url });
-        }
-
-        // 2. Check Role
-        const role = (sessionClaims?.metadata as any)?.role;
-        console.log(`[Middleware] Checking access for ${userId}. Role: '${role}'`);
-
-        // Strict check: Only super_admin allowed (though logic allows both, user request emphasized super_admin)
-        // I will keep 'admin' as fallback unless strict removal requested, 
-        // but user said: "if the user is super_admin then give the access"
-        // Let's stick to what was there but apply to dashboard.
-        if (role !== 'admin' && role !== 'super_admin') {
-            console.log(`[Middleware] Access denied. Redirecting to /`);
-            const indexUrl = new URL('/', req.url);
-            return NextResponse.redirect(indexUrl);
-        }
+        await auth.protect();
     }
     // 3. Other protected routes
     else if (isProtectedRoute(req)) {
