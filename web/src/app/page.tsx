@@ -6,18 +6,13 @@ import Skills from "@/components/Skills";
 import Resume from "@/components/ResumeSection";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import Stories from "@/components/Stories";
 import { getProjects } from "@/actions/projects";
-import { getStories } from "@/actions/stories";
 
 // Force dynamic since we fetch data
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-    const [projectsData, storiesData] = await Promise.all([
-        getProjects(),
-        getStories()
-    ]);
+    const projectsData = await getProjects();
 
     // Map DB projects to UI format
     const mappedProjects = projectsData.map((p: any) => ({
@@ -36,7 +31,6 @@ export default async function Home() {
     return (
         <main>
             <Hero />
-            <Stories stories={storiesData} />
             <About />
             <Projects projects={mappedProjects} />
             <Skills />
