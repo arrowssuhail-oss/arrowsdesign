@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { ExternalLink } from 'lucide-react';
+import { ArrowUpRightIcon } from "@/components/ui/arrow-up-right-icon";
 
 const projects = [
   {
@@ -77,8 +77,8 @@ export default function Work() {
                 <CardContent className="p-8 space-y-6 h-full flex flex-col">
                   {/* Project Visual Placeholder */}
                   <div className={`w-full h-48 rounded-xl bg-gradient-to-br ${project.color} flex items-center justify-center group-hover:scale-105 transition-transform duration-300`}>
-                    <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
-                      <ExternalLink className="h-8 w-8 text-primary" />
+                    <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <ArrowUpRightIcon size={32} className="text-white" />
                     </div>
                   </div>
 

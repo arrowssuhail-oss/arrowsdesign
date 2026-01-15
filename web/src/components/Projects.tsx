@@ -3,6 +3,7 @@ import { ArrowUpRight, BarChart3, Palette, PanelsTopLeft, Smartphone, ChartNoAxe
 import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 import { db } from "@/lib/storage";
+import { ArrowUpRightIcon } from "@/components/ui/arrow-up-right-icon";
 
 // Icon Mapping for serialization
 export const iconMap: Record<string, any> = {
@@ -178,8 +179,8 @@ const ProjectCard = ({ project }: { project: any }) => {
                     <span className="px-3 py-1.5 rounded-full bg-background/80 backdrop-blur-sm text-xs font-medium text-foreground">
                         {project.category}
                     </span>
-                    <div className="w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                        <ArrowUpRight className="w-5 h-5 text-foreground" />
+                    <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 shadow-lg">
+                        <ArrowUpRightIcon size={20} className="text-white" />
                     </div>
                 </div>
 
