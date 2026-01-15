@@ -97,19 +97,19 @@ const BehanceIcon = forwardRef<BehanceIconHandle, BehanceIconProps>(
                     xmlns="http://www.w3.org/2000/svg"
                 >
                     <motion.path
-                        d="M3 18v-12h4.5a3 3 0 0 1 0 6a3 3 0 0 1 0 6h-4.5"
+                        d="M1.7 19L9.3 19C11.2 19 12.8 17.4 12.8 15.5C12.8 13.6 11.2 12 9.2 12L2.2 12L8.9 12C10.8 12 12.4 10.4 12.4 8.5C12.4 6.6 10.8 5 8.9 5L1.7 5Z"
                         animate={controls}
                         initial="normal"
                         variants={VARIANTS}
                     />
                     <motion.path
-                        d="M14 13h7a3.5 3.5 0 0 0 -7 0v1a3.5 3.5 0 0 0 7 0"
+                        d="M15.9 14.3L22.3 14.3C22.3 14.3 22.3 10.4 19.1 10.4C16.1 10.4 15.3 12.6 15.3 14.6C15.3 16.6 16.2 18.3 19.1 18.3C22.2 18.3 22.2 16.2 22.2 16.2"
                         animate={controls}
                         initial="normal"
                         variants={VARIANTS}
                     />
                     <motion.path
-                        d="M14 8h7"
+                        d="M16.4 7.2L21.2 7.2"
                         animate={controls}
                         initial="normal"
                         variants={VARIANTS}
