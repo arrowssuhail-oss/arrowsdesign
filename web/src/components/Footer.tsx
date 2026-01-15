@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Linkedin, Palette, Instagram, Link as LinkIcon } from "lucide-react";
+import { Palette, Instagram, Link as LinkIcon } from "lucide-react";
+import { LinkedinIcon } from "@/components/ui/linkedin-icon";
 
 const socials = [
-    { icon: Linkedin, href: "https://www.linkedin.com/in/suhailbinsaidalavi/", label: "LinkedIn" },
+    { icon: LinkedinIcon, href: "https://www.linkedin.com/in/suhailbinsaidalavi/", label: "LinkedIn" },
     { icon: Palette, href: "https://www.behance.net/ArrowsSuhail", label: "Adobe Behance" },
     { icon: Instagram, href: "https://www.instagram.com/arrows.in_/", label: "Instagram" },
     { icon: LinkIcon, href: "https://linktr.ee/arrows.suhail?utm_source=linktree_profile_share&ltsid=e2729df1-4401-42a8-b1e9-c9f141fda649", label: "Linktree" },
@@ -30,7 +31,7 @@ const Footer = () => {
                             className="p-3 rounded-full bg-accent/5 hover:bg-accent/10 text-muted-foreground hover:text-accent transition-all duration-300 hover:scale-110"
                             aria-label={social.label}
                         >
-                            <social.icon className="w-5 h-5" />
+                            <social.icon className="w-5 h-5 cursor-pointer" size={20} />
                         </a>
                     ))}
                 </div>
