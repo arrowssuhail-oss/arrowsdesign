@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Palette } from "lucide-react";
 import { LinkedinIcon } from "@/components/ui/linkedin-icon";
 import { LinkIcon } from "@/components/ui/link-icon";
 import { InstagramIcon } from "@/components/ui/instagram-icon";
+import { BehanceIcon } from "@/components/ui/behance-icon";
 
 const socials = [
     { icon: LinkedinIcon, href: "https://www.linkedin.com/in/suhailbinsaidalavi/", label: "LinkedIn" },
-    { icon: Palette, href: "https://www.behance.net/ArrowsSuhail", label: "Adobe Behance" },
+    { icon: BehanceIcon, href: "https://www.behance.net/ArrowsSuhail", label: "Adobe Behance" },
     { icon: InstagramIcon, href: "https://www.instagram.com/arrows.in_/", label: "Instagram" },
     { icon: LinkIcon, href: "https://linktr.ee/arrows.suhail?utm_source=linktree_profile_share&ltsid=e2729df1-4401-42a8-b1e9-c9f141fda649", label: "Linktree" },
 ];
