@@ -65,8 +65,15 @@ export default function Contact() {
     const subject = encodeURIComponent(`Contact from ${formData.name}`);
     const body = encodeURIComponent(`${formData.message}\r\n\r\nFrom: ${formData.name} (${formData.email})`);
 
-    // Open Gmail in a new tab
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=arrows.suhail@gmail.com&su=${subject}&body=${body}`, '_blank');
+    // Open Gmail in a new tab using a hidden link to bypass some popup blockers
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=arrows.suhail@gmail.com&su=${subject}&body=${body}`;
+    const link = document.createElement('a');
+    link.href = gmailUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
     toast.success("Opening Gmail...", {
       description: "Please send the pre-filled email to complete your message.",
