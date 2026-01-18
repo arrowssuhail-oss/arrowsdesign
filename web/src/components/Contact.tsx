@@ -60,9 +60,18 @@ export default function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock form submission
-    toast.success('Message sent successfully! I\'ll get back to you soon.');
-    setFormData({ name: '', email: '', message: '' });
+
+    // Construct Gmail URL
+    const subject = encodeURIComponent(`Contact from ${formData.name}`);
+    const body = encodeURIComponent(`${formData.message}\r\n\r\nFrom: ${formData.name} (${formData.email})`);
+
+    // Open Gmail in a new tab
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=arrows.suhail@gmail.com&su=${subject}&body=${body}`, '_blank');
+
+    toast.success("Opening Gmail...", {
+      description: "Please send the pre-filled email to complete your message.",
+    });
+    setFormData({ name: "", email: "", message: "" });
   };
 
   const contactInfo = [
