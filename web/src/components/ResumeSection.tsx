@@ -1,6 +1,8 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from './ui/badge';
-import { Download, Laptop, GraduationCap, Briefcase } from 'lucide-react';
+import { Download, Laptop } from 'lucide-react';
 
 const experience = [
     {
@@ -41,7 +43,13 @@ const education = [
     },
 ];
 
+import { AnimatedIcon, AnimatedIconHandle } from "@/components/ui/animated-icon";
+import { useRef } from "react";
+
 const ResumeSection = () => {
+    const briefcaseRef = useRef<AnimatedIconHandle>(null);
+    const gradCapRef = useRef<AnimatedIconHandle>(null);
+
     return (
         <section id="resume" className="py-32 px-6 bg-gradient-to-b from-transparent via-muted/30 to-transparent">
             <div className="max-w-6xl mx-auto">
@@ -62,10 +70,14 @@ const ResumeSection = () => {
 
                 <div className="grid lg:grid-cols-2 gap-16">
                     {/* Experience */}
-                    <div>
+                    <div
+                        onMouseEnter={() => briefcaseRef.current?.startAnimation()}
+                        onMouseLeave={() => briefcaseRef.current?.stopAnimation()}
+                        className="group/section"
+                    >
                         <div className="flex items-center gap-3 mb-8">
                             <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-                                <Briefcase className="w-5 h-5 text-accent" />
+                                <AnimatedIcon ref={briefcaseRef} name="Briefcase" className="w-5 h-5 text-accent" size={20} />
                             </div>
                             <h3 className="text-xl font-semibold">Work Experience</h3>
                         </div>
@@ -96,10 +108,14 @@ const ResumeSection = () => {
                     </div>
 
                     {/* Education */}
-                    <div>
+                    <div
+                        onMouseEnter={() => gradCapRef.current?.startAnimation()}
+                        onMouseLeave={() => gradCapRef.current?.stopAnimation()}
+                        className="group/section"
+                    >
                         <div className="flex items-center gap-3 mb-8">
                             <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-                                <GraduationCap className="w-5 h-5 text-accent" />
+                                <AnimatedIcon ref={gradCapRef} name="GraduationCap" className="w-5 h-5 text-accent" size={20} />
                             </div>
                             <h3 className="text-xl font-semibold">Education</h3>
                         </div>

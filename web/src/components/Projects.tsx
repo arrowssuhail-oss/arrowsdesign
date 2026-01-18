@@ -1,7 +1,8 @@
 "use client";
 import { ArrowUpRight, BarChart3, Palette, PanelsTopLeft, Smartphone, ChartNoAxesGantt, MonitorSmartphone } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import Tilt from "react-parallax-tilt";
 import { db } from "@/lib/storage";
 import { ArrowUpRightIcon } from "@/components/ui/arrow-up-right-icon";
 
@@ -60,9 +61,6 @@ export const defaultProjects = [
 ];
 
 const ProjectCard = ({ project }: { project: any }) => {
-    const cardRef = useRef<HTMLAnchorElement>(null);
-    const [rotation, setRotation] = useState({ x: 0, y: 0 });
-    const [isHovering, setIsHovering] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     // Auto-play slideshow if multiple images exist
@@ -77,134 +75,113 @@ const ProjectCard = ({ project }: { project: any }) => {
 
     const Icon = iconMap[project.iconName] || Palette;
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        if (!cardRef.current) return;
-
-        const rect = cardRef.current.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
-
-        // Calculate mouse position relative to card center
-        const x = e.clientX - rect.left - width / 2;
-        const y = e.clientY - rect.top - height / 2;
-
-        // Calculate rotation values (scale down for subtle effect)
-        // Rotate Y based on X position, Rotate X based on Y position (inverted)
-        const rotateY = (x / width) * 10; // Reduced rotation for subtlety
-        const rotateX = -(y / height) * 10;
-
-        setRotation({ x: rotateX, y: rotateY });
-    };
-
-    const handleMouseLeave = () => {
-        setRotation({ x: 0, y: 0 });
-        setIsHovering(false);
-    };
-
     // Determine if we have a slideshow or single image
     const hasSlideshow = project.images && project.images.length > 1;
     const displayImage = project.image; // Fallback for single image or initialization
 
     return (
-        <Link
-            ref={cardRef}
-            href={project.link}
-            className="group relative aspect-video rounded-3xl overflow-hidden cursor-pointer hover-lift block animate-flip-in-scroll"
-            onMouseMove={handleMouseMove}
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={handleMouseLeave}
-            style={{
-                transform: `perspective(1000px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg) scale3d(${isHovering ? 1.02 : 1}, ${isHovering ? 1.02 : 1}, ${isHovering ? 1.02 : 1})`,
-                transition: 'transform 0.3s ease-out'
-            }}
+        <Tilt
+            glareEnable={true}
+            glareMaxOpacity={0.3}
+            glareColor="#ffffff"
+            scale={1.05}
+            transitionSpeed={2500}
+            tiltMaxAngleX={15}
+            tiltMaxAngleY={15}
+            className="h-full"
         >
-            {/* Background gradient or Image(s) */}
-            {hasSlideshow ? (
-                <>
-                    <div
-                        className="absolute inset-0 flex transition-transform duration-700 ease-in-out"
-                        style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
-                    >
-                        {project.images.map((img: string, index: number) => (
-                            <img
+            <Link
+                href={project.link}
+                className="group relative aspect-video rounded-3xl overflow-hidden cursor-pointer hover-lift block animate-flip-in-scroll h-full"
+            >
+                {/* Background gradient or Image(s) */}
+                {hasSlideshow ? (
+                    <>
+                        <div
+                            className="absolute inset-0 flex transition-transform duration-700 ease-in-out"
+                            style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+                        >
+                            {project.images.map((img: string, index: number) => (
+                                <img
+                                    key={index}
+                                    src={img}
+                                    alt={`${project.title} - Slide ${index + 1}`}
+                                    className="w-full h-full object-cover flex-shrink-0"
+                                />
+                            ))}
+                        </div>
+                        {/* Overlay to ensure text readability */}
+                        <div className={`absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300`} />
+                    </>
+                ) : displayImage ? (
+                    <>
+                        <img
+                            src={displayImage}
+                            alt={project.title}
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                        {/* Overlay to ensure text readability */}
+                        <div className={`absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300`} />
+                    </>
+                ) : (
+                    <div className={`absolute inset-0 bg-gradient-to-br ${project.color}`} />
+                )}
+
+                {/* Decorative shapes - Only show if no image */}
+                {!displayImage && !hasSlideshow && (
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                        {project.shapes.map((shape: string, index: number) => (
+                            <div
                                 key={index}
-                                src={img}
-                                alt={`${project.title} - Slide ${index + 1}`}
-                                className="w-full h-full object-cover flex-shrink-0"
+                                className={`absolute bg-white/5 backdrop-blur-sm border border-white/10 ${shape} animate-float`}
+                                style={{
+                                    width: index === 0 ? '120px' : index === 1 ? '80px' : '60px',
+                                    height: index === 0 ? '120px' : index === 1 ? '80px' : '60px',
+                                    top: index === 0 ? '-10%' : index === 1 ? '40%' : 'auto',
+                                    right: index === 0 ? '-5%' : 'auto',
+                                    left: index === 0 ? 'auto' : index === 1 ? '-5%' : '80%',
+                                    bottom: index === 2 ? '10%' : 'auto',
+                                    animationDelay: `${index * 1.5}s`,
+                                    animationDuration: `${6 + index * 2}s`
+                                }}
                             />
                         ))}
                     </div>
-                    {/* Overlay to ensure text readability */}
-                    <div className={`absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300`} />
-                </>
-            ) : displayImage ? (
-                <>
-                    <img
-                        src={displayImage}
-                        alt={project.title}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    {/* Overlay to ensure text readability */}
-                    <div className={`absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300`} />
-                </>
-            ) : (
-                <div className={`absolute inset-0 bg-gradient-to-br ${project.color}`} />
-            )}
+                )}
 
-            {/* Decorative shapes - Only show if no image */}
-            {!displayImage && !hasSlideshow && (
-                <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                    {project.shapes.map((shape: string, index: number) => (
-                        <div
-                            key={index}
-                            className={`absolute bg-white/5 backdrop-blur-sm border border-white/10 ${shape} animate-float`}
-                            style={{
-                                width: index === 0 ? '120px' : index === 1 ? '80px' : '60px',
-                                height: index === 0 ? '120px' : index === 1 ? '80px' : '60px',
-                                top: index === 0 ? '-10%' : index === 1 ? '40%' : 'auto',
-                                right: index === 0 ? '-5%' : 'auto',
-                                left: index === 0 ? 'auto' : index === 1 ? '-5%' : '80%',
-                                bottom: index === 2 ? '10%' : 'auto',
-                                animationDelay: `${index * 1.5}s`,
-                                animationDuration: `${6 + index * 2}s`
-                            }}
+                {/* Content overlay */}
+                <div className={`absolute inset-0 p-8 flex flex-col justify-between z-20 ${displayImage || hasSlideshow ? 'text-white' : ''}`}>
+                    <div className="flex justify-between items-start">
+                        <span className="px-3 py-1.5 rounded-full bg-background/80 backdrop-blur-sm text-xs font-medium text-foreground">
+                            {project.category}
+                        </span>
+                        <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 shadow-lg">
+                            <ArrowUpRightIcon size={20} className="text-white" />
+                        </div>
+                    </div>
+
+                    <div style={{
+                        transform: `translateZ(50px)`,
+                        transformStyle: 'preserve-3d'
+                    }}>
+                        <h3 className="text-2xl md:text-3xl font-bold">
+                            {project.title}
+                        </h3>
+                    </div>
+
+                    {/* Floating Icon */}
+                    <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <Icon
+                            className="w-24 h-24 text-white/10 rotate-12 transform group-hover:animate-[popIn_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]"
+                            strokeWidth={1.5}
                         />
-                    ))}
-                </div>
-            )}
-
-            {/* Content overlay */}
-            <div className={`absolute inset-0 p-8 flex flex-col justify-between z-20 ${displayImage || hasSlideshow ? 'text-white' : ''}`}>
-                <div className="flex justify-between items-start">
-                    <span className="px-3 py-1.5 rounded-full bg-background/80 backdrop-blur-sm text-xs font-medium text-foreground">
-                        {project.category}
-                    </span>
-                    <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 shadow-lg">
-                        <ArrowUpRightIcon size={20} className="text-white" />
                     </div>
                 </div>
 
-                <div style={{
-                    transform: `translateZ(50px)`,
-                    transformStyle: 'preserve-3d'
-                }}>
-                    <h3 className="text-2xl md:text-3xl font-bold">
-                        {project.title}
-                    </h3>
-                </div>
-
-                {/* Floating Icon */}
-                <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <Icon
-                        className="w-24 h-24 text-white/10 rotate-12 transform group-hover:animate-[popIn_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]"
-                        strokeWidth={1.5}
-                    />
-                </div>
-            </div>
-
-            {/* Hover gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-foreground/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        </Link>
+                {/* Hover gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-foreground/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </Link>
+        </Tilt>
     );
 };
 
