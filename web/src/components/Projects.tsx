@@ -30,7 +30,7 @@ export const defaultProjects = [
     },
     {
         id: 2,
-        title: "Antigravity",
+        title: "Web Development",
         category: "Web Design",
         color: "from-blue-500/30 to-blue-500/5",
         iconName: "PanelsTopLeft",
@@ -40,7 +40,7 @@ export const defaultProjects = [
     },
     {
         id: 3,
-        title: "Human Centered Design",
+        title: "Product Digital Design",
         category: "UI/UX Design",
         color: "from-purple-500/30 to-purple-500/5",
         iconName: "PanelsTopLeft",
@@ -50,8 +50,8 @@ export const defaultProjects = [
     },
     {
         id: 4,
-        title: "Video Editing",
-        category: "Edited Videos",
+        title: "Video Graphic Editing",
+        category: "Video Edit",
         color: "from-violet-500/30 to-violet-500/5",
         iconName: "MonitorSmartphone",
         shapes: ["rounded-2xl", "rounded-lg", "rounded-full"],

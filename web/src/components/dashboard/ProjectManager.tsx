@@ -44,7 +44,7 @@ export default function ProjectManager() {
             window.dispatchEvent(new Event("project-update"));
             setIsProjectSheetOpen(false);
             setEditingProject(null);
-            toast({ title: "Success", description: "Project dashboard updated." });
+            toast({ title: "Success", description: "Project updated." });
         } catch (error) {
             toast({ variant: "destructive", title: "Sync Failed" });
         } finally {

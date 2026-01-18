@@ -18,7 +18,7 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         heroTitle: "Custom & Unique Identity",
         heroDescription: "A comprehensive brand identity project focusing on creating a distinct visual language that resonates with the target audience while maintaining professional versatility.",
         heroImage: "/projects/identity.png",
-        gallery: [],
+        gallery: ["/Project-add-image/Id Card Mockup.jpg", "/Project-add-image/Id Card Mockup 2.jpg", "/Project-add-image/nw yr 1.jpg", "/Project-add-image/nw yr 2.jpg", "/Project-add-image/nw yr 3.jpg", "/Project-add-image/nw yr 4.jpg"],
         challenge: "The main challenge was to create a unique identity that stands out in a crowded market while maintaining a professional and trustworthy appeal. We needed to ensure potential clients connect with the brand instantly.",
         solution: "We developed a dynamic visual system based on geometric shapes and a vibrant color palette. This approach allows for flexibility across various media while maintaining strong brand recognition.",
         role: "Graphic Designer",
@@ -28,10 +28,10 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         features: ["Brand Identity System", "Typography System", "Color System", "Social Media Assets", "Visual Language"]
     },
     2: {
-        heroTitle: "Antigravity",
+        heroTitle: "Web Development",
         heroDescription: "A game-changing web experience that challenges the norms of digital interaction. Created for Google to demonstrate advanced web capabilities.",
         heroImage: "/projects/web-design.png",
-        gallery: [],
+        gallery: ["/Project-add-image/Web-1.png", "/Project-add-image/Web-2.png"],
         challenge: "To create an immersive, high-performance web experience that pushes the boundaries of current browser capabilities while maintaining accessibility and responsiveness.",
         solution: "Utilized cutting-edge web technologies including WebGL and advanced CSS animations to create a fluid, physics-defying user interface.",
         role: "Web Designer & Developer",
@@ -41,7 +41,7 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         features: ["3D Interactive Elements", "Physics Simulation", "Custom WebGL Renderer", "Responsive Layout", "Performance Optimization", "Mobile Responsiveness"]
     },
     3: {
-        heroTitle: "Human Centered Design",
+        heroTitle: "Product Digital Design",
         heroDescription: "A user-first approach to digital product design, focusing on solving real user problems through empathy and iterative testing.",
         heroImage: "/projects/ux-design.png",
         gallery: [],
@@ -54,7 +54,7 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         features: ["User Research", "Prototyping", "Interactive UI Elements", "Design System", "Performance Optimization", "Mobile Responsiveness"]
     },
     4: {
-        heroTitle: "Video Editing",
+        heroTitle: "Video Graphic Editing",
         heroDescription: "Crafting compelling visual stories through rhythm, pacing, and seamless transitions to engage audiences and convey messages effectively.",
         heroImage: "/projects/video-editing.png",
         gallery: [],
