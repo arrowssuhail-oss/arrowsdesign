@@ -22,10 +22,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/* Smooth Scroll Behavior */
-html {
-  scroll-behavior: smooth;
-}
+/* Smooth Scroll Behavior disabled for Lenis */
 
 @layer base {
   :root {

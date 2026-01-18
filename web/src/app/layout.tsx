@@ -7,6 +7,7 @@ import AutoSignOutListener from "@/components/AutoSignOutListener";
 import "./globals.css";
 import { getStories } from "@/actions/stories";
 import { ClerkProvider } from "@clerk/nextjs";
+import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata: Metadata = {
     title: "Arrows Design",
@@ -30,6 +31,7 @@ export default async function RootLayout({
                         enableSystem={false}
                         forcedTheme="dark"
                     >
+                        <SmoothScroll />
                         {/* AuthSyncWrapper ensures user is created in MongoDB on first visit */}
                         <AuthSyncWrapper>
                             <AutoSignOutListener />
