@@ -164,20 +164,19 @@ const AnimatedIcon = forwardRef<AnimatedIconHandle, AnimatedIconProps>(
                 >
                     {iconElements.map((el, index) => {
                         const commonProps = {
-                            key: index,
                             animate: controls,
                             initial: "normal",
                             variants: VARIANTS,
                         };
 
                         if (el.type === 'path') {
-                            return <motion.path {...commonProps} d={el.d} />;
+                            return <motion.path key={index} {...commonProps} d={el.d} />;
                         } else if (el.type === 'circle') {
-                            return <motion.circle {...commonProps} cx={el.cx} cy={el.cy} r={el.r} fill={el.fill} />;
+                            return <motion.circle key={index} {...commonProps} cx={el.cx} cy={el.cy} r={el.r} fill={el.fill} />;
                         } else if (el.type === 'rect') {
-                            return <motion.rect {...commonProps} x={el.x} y={el.y} width={el.width} height={el.height} rx={el.rx} />;
+                            return <motion.rect key={index} {...commonProps} x={el.x} y={el.y} width={el.width} height={el.height} rx={el.rx} />;
                         } else if (el.type === 'line') {
-                            return <motion.line {...commonProps} x1={el.x1} x2={el.x2} y1={el.y1} y2={el.y2} />;
+                            return <motion.line key={index} {...commonProps} x1={el.x1} x2={el.x2} y1={el.y1} y2={el.y2} />;
                         }
                         return null;
                     })}

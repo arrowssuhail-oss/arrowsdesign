@@ -2,7 +2,52 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from './ui/badge';
-import { Download, Laptop } from 'lucide-react';
+import { Laptop } from 'lucide-react';
+import { motion, useAnimation } from "motion/react";
+import { useRef, forwardRef, useImperativeHandle } from "react";
+
+const DownloadAnimation = forwardRef(({ }, ref) => {
+    const controls = useAnimation();
+
+    useImperativeHandle(ref, () => ({
+        startAnimation: async () => {
+            await controls.start({
+                y: 4,
+                opacity: 0,
+                transition: { duration: 0.4 }
+            });
+            controls.set({ y: -15, opacity: 0 });
+            await controls.start({
+                y: 0,
+                opacity: 1,
+                transition: { duration: 0.4 }
+            });
+        }
+    }));
+
+    return (
+        <div className="mr-2">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <motion.g animate={controls}>
+                    <path d="M12 15V3" />
+                    <path d="m7 10 5 5 5-5" />
+                </motion.g>
+            </svg>
+        </div>
+    );
+});
+DownloadAnimation.displayName = "DownloadAnimation";
 
 const experience = [
     {
@@ -44,11 +89,12 @@ const education = [
 ];
 
 import { AnimatedIcon, AnimatedIconHandle } from "@/components/ui/animated-icon";
-import { useRef } from "react";
+// The existing useRef import is already here, no need to add another one.
 
 const ResumeSection = () => {
     const briefcaseRef = useRef<AnimatedIconHandle>(null);
     const gradCapRef = useRef<AnimatedIconHandle>(null);
+    const downloadRef = useRef<{ startAnimation: () => void }>(null);
 
     return (
         <section id="resume" className="py-32 px-6 bg-gradient-to-b from-transparent via-muted/30 to-transparent">
@@ -60,9 +106,18 @@ const ResumeSection = () => {
                             Experience & Education
                         </h2>
                     </div>
-                    <Button variant="accent" className="mt-6 md:mt-0" asChild>
-                        <a href="/MUHAMMED SUHAIL CV.pdf" download="MUHAMMED_SUHAIL_CV.pdf">
-                            <Download className="mr-2 h-4 w-4" />
+                    <Button
+                        variant="accent"
+                        className="mt-6 md:mt-0 group"
+                        asChild
+                        onClick={() => downloadRef.current?.startAnimation()}
+                    >
+                        <a
+                            href="/MUHAMMED SUHAIL CV.pdf"
+                            download="MUHAMMED_SUHAIL_CV.pdf"
+                            className="flex items-center"
+                        >
+                            <DownloadAnimation ref={downloadRef} />
                             Download CV
                         </a>
                     </Button>
