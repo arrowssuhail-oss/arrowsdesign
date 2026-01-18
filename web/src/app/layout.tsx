@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navigation from "@/components/Navigation";
 import { Toaster } from "@/components/ui/sonner";
@@ -41,6 +42,7 @@ export default async function RootLayout({
                                 {children}
                                 <Toaster position="top-right" richColors />
                                 <SpeedInsights />
+                                <Analytics />
                             </div>
                         </AuthSyncWrapper>
                     </ThemeProvider>
