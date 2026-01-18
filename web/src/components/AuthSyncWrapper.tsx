@@ -17,6 +17,8 @@ export default function AuthSyncWrapper({ children }: { children: React.ReactNod
 
     useEffect(() => {
         const syncUser = async () => {
+            // Temporary disable backend sync for Vercel deployment
+            /*
             if (isSignedIn && user && !hasSynced.current) {
                 try {
                     const token = await getToken();
@@ -45,6 +47,7 @@ export default function AuthSyncWrapper({ children }: { children: React.ReactNod
                     console.error('Error syncing user:', error);
                 }
             }
+            */
         };
 
         syncUser();

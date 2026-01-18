@@ -6,6 +6,9 @@ import { revalidatePath } from "next/cache";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 export async function getProjects() {
+    // Temporary disable backend for Vercel deployment
+    return [];
+    /*
     try {
         const res = await fetch(`${API_URL}/projects`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch projects');
@@ -17,6 +20,7 @@ export async function getProjects() {
         console.error("  Error Details:", error.message, error.cause);
         return [];
     }
+    */
 }
 
 export async function createProject(prevState: any, formData: FormData) {

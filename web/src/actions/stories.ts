@@ -6,6 +6,9 @@ import { revalidatePath } from "next/cache";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 export async function getStories() {
+    // Temporary disable backend for Vercel deployment
+    return [];
+    /*
     try {
         const res = await fetch(`${API_URL}/stories`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch stories');
@@ -14,6 +17,7 @@ export async function getStories() {
         console.error("Error fetching stories:", error);
         return [];
     }
+    */
 }
 
 export async function createStory(prevState: any, formData: FormData) {
