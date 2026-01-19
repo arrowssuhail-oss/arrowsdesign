@@ -19,7 +19,7 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         heroDescription: "A comprehensive brand identity project focusing on creating a distinct visual language that resonates with the target audience while maintaining professional versatility.",
         heroImage: "/projects/identity.png",
         gallery: ["/Project-add-image/Id Card Mockup.jpg", "/Project-add-image/Id Card Mockup 2.jpg", "/Project-add-image/nw yr 1.jpg", "/Project-add-image/nw yr 2.jpg", "/Project-add-image/nw yr 3.jpg", "/Project-add-image/nw yr 4.jpg"],
-        challenge: "The main challenge was to create a unique identity that stands out in a crowded market while maintaining a professional and trustworthy appeal. We needed to ensure potential clients connect with the brand instantly.",
+        challenge: "The main challenge was to create a unique identity that stands out in a crowded market while maintaining a professional and trustworthy appeal. The client, a local tech startup, struggled with an outdated logo that looked like a construction firm. They needed a modern, tech-focused look to attract younger investors.",
         solution: "We developed a dynamic visual system based on geometric shapes and a vibrant color palette. This approach allows for flexibility across various media while maintaining strong brand recognition.",
         role: "Graphic Designer",
         timeline: "1-2 Days",
