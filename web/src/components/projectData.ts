@@ -20,7 +20,7 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         heroImage: "/projects/identity.png",
         gallery: ["/Project-add-image/Id Card Mockup.jpg", "/Project-add-image/Id Card Mockup 2.jpg", "/Project-add-image/nw yr 1.jpg", "/Project-add-image/nw yr 2.jpg", "/Project-add-image/nw yr 3.jpg", "/Project-add-image/nw yr 4.jpg"],
         challenge: "The main challenge was to create a unique identity that stands out in a crowded market while maintaining a professional and trustworthy appeal. The client, a local tech startup, struggled with an outdated logo that looked like a construction firm. They needed a modern, tech-focused look to attract younger investors.",
-        solution: "We developed a dynamic visual system based on geometric shapes and a vibrant color palette. This approach allows for flexibility across various media while maintaining strong brand recognition.",
+        solution: "We developed a dynamic visual system based on circuit-board inspired geometric shapes and a neon-digital color palette to signal innovation. This approach allows for flexibility across various media while maintaining strong brand recognition.",
         role: "Graphic Designer",
         timeline: "1-2 Days",
         tools: "Adobe Creative Suite",
