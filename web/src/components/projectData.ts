@@ -48,7 +48,7 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         challenge: "To redesign a complex legacy system into an intuitive, user-friendly interface without losing critical functionality for power users.",
         solution: "Conducted extensive user research to inform a modular design system that simplifies workflows while providing depth for advanced operations.",
         role: "Lead Product Designer",
-        timeline: "3 Months",
+        timeline: "1-2 Months",
         tools: "Figma, UserTesting, Maze",
         year: "2025",
         features: ["User Research", "Prototyping", "Interactive UI Elements", "Design System", "Performance Optimization", "Mobile Responsiveness"]
@@ -56,8 +56,12 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
     4: {
         heroTitle: "Video Graphic Editing",
         heroDescription: "Crafting compelling visual stories through rhythm, pacing, and seamless transitions to engage audiences and convey messages effectively.",
-        heroImage: "/projects/video-editing.png",
-        gallery: [],
+        heroImage: "",
+        gallery: [
+            "/projects/video edit/ads 1.mp4",
+            "/projects/video edit/ads 2.mp4",
+            "/projects/video edit/Noorun ala noor.mp4"
+        ],
         challenge: "To distill hours of raw footage into a concise, high-impact narrative that retains user attention across social media platforms.",
         solution: "Implemented fast-paced editing techniques with dynamic text overlays and sound design to create high-energy content optimized for engagement.",
         role: "Video Editor",

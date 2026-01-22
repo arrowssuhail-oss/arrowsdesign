@@ -70,7 +70,7 @@ const VideoEditing = () => {
               <MonitorSmartphone className="w-32 h-32 text-foreground/40" />
             </div>
           ) : (
-            <ProjectCarousel images={allImages} />
+            <ProjectCarousel images={allImages} autoplay={false} />
           )}
 
           <div className="flex justify-center mt-12">

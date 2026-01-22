@@ -13,9 +13,12 @@ interface ProjectCarouselProps {
     images: string[]
     className?: string
     href?: string
+    autoplay?: boolean
 }
 
-export function ProjectCarousel({ images, className, href }: ProjectCarouselProps) {
+const isVideo = (src: string) => /\.(mp4|webm|ogg)$/i.test(src);
+
+export function ProjectCarousel({ images, className, href, autoplay = true }: ProjectCarouselProps) {
     const [api, setApi] = React.useState<CarouselApi>()
     const [current, setCurrent] = React.useState(0)
 
@@ -32,15 +35,16 @@ export function ProjectCarousel({ images, className, href }: ProjectCarouselProp
     }, [api])
 
     // Auto-play
+    // Auto-play
     React.useEffect(() => {
-        if (!api) return;
+        if (!api || !autoplay) return;
 
         const interval = setInterval(() => {
             api.scrollNext()
         }, 5000)
 
         return () => clearInterval(interval)
-    }, [api])
+    }, [api, autoplay])
 
     if (!images || images.length === 0) return null;
 
@@ -57,20 +61,36 @@ export function ProjectCarousel({ images, className, href }: ProjectCarouselProp
                                     rel="noopener noreferrer"
                                     className="block w-full h-full cursor-pointer"
                                 >
+                                    {isVideo(img) ? (
+                                        <video
+                                            src={img}
+                                            controls
+                                            className="w-full h-full object-contain"
+                                        />
+                                    ) : (
+                                        <img
+                                            src={img}
+                                            alt=""
+                                            className="w-full h-full object-contain"
+                                            onError={(e) => e.currentTarget.style.display = 'none'}
+                                        />
+                                    )}
+                                </a>
+                            ) : (
+                                isVideo(img) ? (
+                                    <video
+                                        src={img}
+                                        controls
+                                        className="w-full h-full object-contain"
+                                    />
+                                ) : (
                                     <img
                                         src={img}
                                         alt=""
                                         className="w-full h-full object-contain"
                                         onError={(e) => e.currentTarget.style.display = 'none'}
                                     />
-                                </a>
-                            ) : (
-                                <img
-                                    src={img}
-                                    alt=""
-                                    className="w-full h-full object-contain"
-                                    onError={(e) => e.currentTarget.style.display = 'none'}
-                                />
+                                )
                             )}
                         </div>
                     </CarouselItem>
