@@ -10,10 +10,12 @@ import "./globals.css";
 import { getStories } from "@/actions/stories";
 import { ClerkProvider } from "@clerk/nextjs";
 import SmoothScroll from "@/components/SmoothScroll";
+import MagneticWrapper from "@/components/ui/magnetic-wrapper";
+import WhatsAppBtn from "@/components/WhatsAppBtn";
 
 export const metadata: Metadata = {
     title: "Muhammed Suhail",
-    description: "Portfolio of Muhammed Suhail - A multi-disciplinary designer crafting minimal, <br /> meaningful digital experiences. UI/UX, Brand Identity & Motion Design.",
+    description: "Portfolio of Muhammed Suhail - Graphic Designer & Video Editor | Founder @ Arrows Design | Web Design & Branding | Helping Brands Grow with Visuals",
 };
 
 export default async function RootLayout({
@@ -43,6 +45,11 @@ export default async function RootLayout({
                                 <Toaster position="top-right" richColors />
                                 <SpeedInsights />
                                 <Analytics />
+                                <div className="fixed bottom-6 right-6 z-50">
+                                    <MagneticWrapper>
+                                        <WhatsAppBtn />
+                                    </MagneticWrapper>
+                                </div>
                             </div>
                         </AuthSyncWrapper>
                     </ThemeProvider>
