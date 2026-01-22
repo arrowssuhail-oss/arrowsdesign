@@ -13,7 +13,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata: Metadata = {
     title: "Arrows Design",
-    description: "Portfolio of Arrows Design - A multi-disciplinary designer crafting minimal, meaningful digital experiences. UI/UX, Brand Identity & Motion Design.",
+    description: "Portfolio of Muhammed Suhail - A multi-disciplinary designer crafting minimal, <br /> meaningful digital experiences. UI/UX, Brand Identity & Motion Design.",
 };
 
 export default async function RootLayout({
