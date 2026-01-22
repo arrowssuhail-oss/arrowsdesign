@@ -66,7 +66,7 @@ export default function Contact() {
     const body = encodeURIComponent(`${formData.message}\r\n\r\nFrom: ${formData.name} (${formData.email})`);
 
     // Open Gmail in a new tab using a hidden link to bypass some popup blockers
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=arrows.suhail@gmail.com&su=${subject}&body=${body}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=info@arrowsdesign.me&su=${subject}&body=${body}`;
     const link = document.createElement('a');
     link.href = gmailUrl;
     link.target = '_blank';
