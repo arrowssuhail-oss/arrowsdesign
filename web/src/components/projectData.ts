@@ -3,7 +3,7 @@ export interface ProjectPageData {
     heroTitle: string;
     heroDescription: string;
     heroImage: string;
-    gallery: (string | { type: 'video'; url: string; thumbnail: string } | { type: 'image'; url: string; overlay?: string })[];
+    gallery: (string | { type: 'video'; url: string; thumbnail: string } | { type: 'image'; url: string; overlay?: string; href?: string })[];
     challenge: string;
     solution: string;
     role: string;
@@ -32,7 +32,7 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         heroDescription: "A game-changing web experience that challenges the norms of digital interaction. Created for Google to demonstrate advanced web capabilities.",
         heroImage: "",
         gallery: [
-            { type: 'image', url: "/Project-add-image/Web-1.png", },
+            { type: 'image', url: "/Project-add-image/Web-1.png", href: "https://arrowsdesign.me" },
             { type: 'image', url: "/Project-add-image/Web-2.png", overlay: "UNDER DEVELOPMENT" }
         ],
         challenge: "To create an immersive, high-performance web experience that pushes the boundaries of current browser capabilities while maintaining accessibility and responsiveness.",

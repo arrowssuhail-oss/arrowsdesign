@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 import { Play } from "lucide-react"
 
 interface ProjectCarouselProps {
-    images: (string | { type: 'video'; url: string; thumbnail: string } | { type: 'image'; url: string; overlay?: string })[]
+    images: (string | { type: 'video'; url: string; thumbnail: string } | { type: 'image'; url: string; overlay?: string; href?: string })[]
     className?: string
     href?: string
     autoplay?: boolean
@@ -124,24 +124,27 @@ export function ProjectCarousel({ images, className, href, autoplay = true }: Pr
     return (
         <Carousel setApi={setApi} className={cn("w-full relative group", className)} opts={{ loop: true }}>
             <CarouselContent>
-                {images.map((img, index) => (
-                    <CarouselItem key={index}>
-                        <div className="aspect-video relative rounded-3xl overflow-hidden bg-muted/20 flex items-center justify-center">
-                            {href ? (
-                                <a
-                                    href={href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block w-full h-full cursor-pointer"
-                                >
-                                    {renderItem(img)}
-                                </a>
-                            ) : (
-                                renderItem(img)
-                            )}
-                        </div>
-                    </CarouselItem>
-                ))}
+                {images.map((img, index) => {
+                    const itemHref = (typeof img === 'object' && 'href' in img) ? img.href : href;
+                    return (
+                        <CarouselItem key={index}>
+                            <div className="aspect-video relative rounded-3xl overflow-hidden bg-muted/20 flex items-center justify-center">
+                                {itemHref ? (
+                                    <a
+                                        href={itemHref}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block w-full h-full cursor-pointer"
+                                    >
+                                        {renderItem(img)}
+                                    </a>
+                                ) : (
+                                    renderItem(img)
+                                )}
+                            </div>
+                        </CarouselItem>
+                    );
+                })}
             </CarouselContent>
             {images.length > 1 && (
                 <>
