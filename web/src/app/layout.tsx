@@ -12,7 +12,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import SmoothScroll from "@/components/SmoothScroll";
 
 export const metadata: Metadata = {
-    title: "Arrows Design",
+    title: "Muhammed Suhail",
     description: "Portfolio of Muhammed Suhail - A multi-disciplinary designer crafting minimal, <br /> meaningful digital experiences. UI/UX, Brand Identity & Motion Design.",
 };
 
