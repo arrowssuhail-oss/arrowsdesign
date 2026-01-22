@@ -14,9 +14,9 @@ import MagneticWrapper from "@/components/ui/magnetic-wrapper";
 import WhatsAppBtn from "@/components/WhatsAppBtn";
 
 export const metadata: Metadata = {
-    title: "Muhammed Suhail",
-    description: "Portfolio of Muhammed Suhail",
-    keywords: "Graphic Designer, Video Editor, Web Design & Branding",
+    title: "Portfolio of Muhammed Suhail",
+    description: "Graphic Designer, Video Editor, Web Design & Branding",
+    // keywords: "Graphic Designer, Video Editor, Web Design & Branding",
 };
 
 export default async function RootLayout({
