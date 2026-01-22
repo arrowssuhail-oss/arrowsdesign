@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 import { Play } from "lucide-react"
 
 interface ProjectCarouselProps {
-    images: (string | { type: 'video'; url: string; thumbnail: string })[]
+    images: (string | { type: 'video'; url: string; thumbnail: string } | { type: 'image'; url: string; overlay?: string })[]
     className?: string
     href?: string
     autoplay?: boolean
@@ -49,10 +49,11 @@ export function ProjectCarousel({ images, className, href, autoplay = true }: Pr
 
     if (!images || images.length === 0) return null;
 
-    const renderItem = (img: string | { type: 'video'; url: string; thumbnail: string }) => {
+    const renderItem = (img: string | { type: 'video'; url: string; thumbnail: string } | { type: 'image'; url: string; overlay?: string }) => {
         const isObj = typeof img === 'object';
         const src = isObj ? img.url : img;
-        const thumbnail = isObj ? img.thumbnail : null;
+        const thumbnail = isObj && 'thumbnail' in img ? img.thumbnail : null;
+        const overlay = isObj && 'overlay' in img ? img.overlay : null;
 
         // 1. Google Drive Link Logic
         if (isDriveLink(src)) {
@@ -96,14 +97,27 @@ export function ProjectCarousel({ images, className, href, autoplay = true }: Pr
             );
         }
 
-        // 3. Standard Image Logic
+        // 3. Standard Image Logic with Overlay
         return (
-            <img
-                src={src}
-                alt=""
-                className="w-full h-full object-contain"
-                onError={(e) => e.currentTarget.style.display = 'none'}
-            />
+            <div className="w-full h-full relative">
+                <img
+                    src={src}
+                    alt=""
+                    className="w-full h-full object-contain"
+                    onError={(e) => e.currentTarget.style.display = 'none'}
+                />
+                {overlay && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                        <div className="px-8 py-4 bg-background/10 border border-amber-500/30 rounded-xl backdrop-blur-md shadow-2xl skew-x-[-10deg] hover:skew-x-0 transition-transform duration-500 group/overlay">
+                            <h3 className="text-amber-500 text-2xl md:text-4xl font-black uppercase tracking-[0.2em] skew-x-[10deg] group-hover/overlay:skew-x-0 transition-transform duration-500">
+                                {overlay}
+                            </h3>
+                            <div className="hidden md:block absolute -bottom-2 -right-2 w-4 h-4 border-b-2 border-r-2 border-amber-500/50" />
+                            <div className="hidden md:block absolute -top-2 -left-2 w-4 h-4 border-t-2 border-l-2 border-amber-500/50" />
+                        </div>
+                    </div>
+                )}
+            </div>
         );
     };
 

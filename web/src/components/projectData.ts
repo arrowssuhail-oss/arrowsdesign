@@ -3,7 +3,7 @@ export interface ProjectPageData {
     heroTitle: string;
     heroDescription: string;
     heroImage: string;
-    gallery: (string | { type: 'video'; url: string; thumbnail: string })[];
+    gallery: (string | { type: 'video'; url: string; thumbnail: string } | { type: 'image'; url: string; overlay?: string })[];
     challenge: string;
     solution: string;
     role: string;
@@ -31,7 +31,10 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         heroTitle: "Web Development",
         heroDescription: "A game-changing web experience that challenges the norms of digital interaction. Created for Google to demonstrate advanced web capabilities.",
         heroImage: "",
-        gallery: ["/Project-add-image/Web-1.png", "/Project-add-image/Web-2.png"],
+        gallery: [
+            { type: 'image', url: "/Project-add-image/Web-1.png", },
+            { type: 'image', url: "/Project-add-image/Web-2.png", overlay: "UNDER DEVELOPMENT" }
+        ],
         challenge: "To create an immersive, high-performance web experience that pushes the boundaries of current browser capabilities while maintaining accessibility and responsiveness.",
         solution: "Utilized cutting-edge web technologies including WebGL and advanced CSS animations to create a fluid, physics-defying user interface.",
         role: "Web Designer & Developer",
