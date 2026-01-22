@@ -3,7 +3,7 @@ export interface ProjectPageData {
     heroTitle: string;
     heroDescription: string;
     heroImage: string;
-    gallery: string[];
+    gallery: (string | { type: 'video'; url: string; thumbnail: string })[];
     challenge: string;
     solution: string;
     role: string;
@@ -58,9 +58,21 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         heroDescription: "Crafting compelling visual stories through rhythm, pacing, and seamless transitions to engage audiences and convey messages effectively.",
         heroImage: "",
         gallery: [
-            "/projects/video%20edit/ads%201.mp4",
-            "/projects/video%20edit/ads%202.mp4",
-            "/projects/video%20edit/Noorun%20ala%20noor.mp4"
+            {
+                type: 'video',
+                url: "https://drive.google.com/file/d/1Uhy6YbbkhffVOlPIuujQ5ayknzlGlfcP/view?usp=sharing",
+                thumbnail: "/projects/video%20edit/Video%201.png"
+            },
+            {
+                type: 'video',
+                url: "https://drive.google.com/file/d/1vyMA3Dp7G37DJ8gADUNrg-SM4Kgh-uPF/view?usp=sharing",
+                thumbnail: "/projects/video%20edit/Video%202.png"
+            },
+            {
+                type: 'video',
+                url: "https://drive.google.com/file/d/17fZqjTjne_1g9w31ovjWExI89xtjZx0f/view?usp=sharing",
+                thumbnail: "/projects/video%20edit/Video%203.png"
+            }
         ],
         challenge: "To distill hours of raw footage into a concise, high-impact narrative that retains user attention across social media platforms.",
         solution: "Implemented fast-paced editing techniques with dynamic text overlays and sound design to create high-energy content optimized for engagement.",

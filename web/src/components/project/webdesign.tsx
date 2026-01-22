@@ -30,7 +30,12 @@ const WebDesign = () => {
 
   const allImages = [content.heroImage, ...(content.gallery || [])]
     .filter(Boolean)
-    .filter(img => !img?.includes('antigravity-hero.png'));
+    .filter(img => {
+      if (typeof img === 'string') {
+        return !img?.includes('antigravity-hero.png');
+      }
+      return true; // Keep video objects
+    });
 
   return (
     <div className="min-h-screen bg-background text-foreground">

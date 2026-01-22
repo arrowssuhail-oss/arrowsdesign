@@ -8,15 +8,17 @@ import {
     type CarouselApi,
 } from "@/components/ui/carousel"
 import { cn } from "@/lib/utils"
+import { Play } from "lucide-react"
 
 interface ProjectCarouselProps {
-    images: string[]
+    images: (string | { type: 'video'; url: string; thumbnail: string })[]
     className?: string
     href?: string
     autoplay?: boolean
 }
 
 const isVideo = (src: string) => /\.(mp4|webm|ogg)$/i.test(src);
+const isDriveLink = (src: string) => src.includes('drive.google.com');
 
 export function ProjectCarousel({ images, className, href, autoplay = true }: ProjectCarouselProps) {
     const [api, setApi] = React.useState<CarouselApi>()
@@ -35,7 +37,6 @@ export function ProjectCarousel({ images, className, href, autoplay = true }: Pr
     }, [api])
 
     // Auto-play
-    // Auto-play
     React.useEffect(() => {
         if (!api || !autoplay) return;
 
@@ -47,6 +48,64 @@ export function ProjectCarousel({ images, className, href, autoplay = true }: Pr
     }, [api, autoplay])
 
     if (!images || images.length === 0) return null;
+
+    const renderItem = (img: string | { type: 'video'; url: string; thumbnail: string }) => {
+        const isObj = typeof img === 'object';
+        const src = isObj ? img.url : img;
+        const thumbnail = isObj ? img.thumbnail : null;
+
+        // 1. Google Drive Link Logic
+        if (isDriveLink(src)) {
+            return (
+                <div className="w-full h-full relative flex items-center justify-center bg-muted/30 group/card">
+                    {thumbnail && (
+                        <div className="absolute inset-0">
+                            <img
+                                src={thumbnail}
+                                alt=""
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-black/40 group-hover/card:bg-black/30 transition-colors" />
+                        </div>
+                    )}
+                    <a
+                        href={src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group/play z-10 flex flex-col items-center gap-4 transition-transform hover:scale-105"
+                    >
+                        <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center group-hover/play:bg-white/30 transition-all shadow-xl">
+                            <Play className="w-8 h-8 ml-1 text-white fill-white" />
+                        </div>
+                        <span className="text-sm font-medium text-white uppercase tracking-widest px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-sm">
+                            Watch on Google Drive
+                        </span>
+                    </a>
+                </div>
+            );
+        }
+
+        // 2. Standard Video Logic
+        if (isVideo(src)) {
+            return (
+                <video
+                    src={src}
+                    controls
+                    className="w-full h-full object-contain"
+                />
+            );
+        }
+
+        // 3. Standard Image Logic
+        return (
+            <img
+                src={src}
+                alt=""
+                className="w-full h-full object-contain"
+                onError={(e) => e.currentTarget.style.display = 'none'}
+            />
+        );
+    };
 
     return (
         <Carousel setApi={setApi} className={cn("w-full relative group", className)} opts={{ loop: true }}>
@@ -61,36 +120,10 @@ export function ProjectCarousel({ images, className, href, autoplay = true }: Pr
                                     rel="noopener noreferrer"
                                     className="block w-full h-full cursor-pointer"
                                 >
-                                    {isVideo(img) ? (
-                                        <video
-                                            src={img}
-                                            controls
-                                            className="w-full h-full object-contain"
-                                        />
-                                    ) : (
-                                        <img
-                                            src={img}
-                                            alt=""
-                                            className="w-full h-full object-contain"
-                                            onError={(e) => e.currentTarget.style.display = 'none'}
-                                        />
-                                    )}
+                                    {renderItem(img)}
                                 </a>
                             ) : (
-                                isVideo(img) ? (
-                                    <video
-                                        src={img}
-                                        controls
-                                        className="w-full h-full object-contain"
-                                    />
-                                ) : (
-                                    <img
-                                        src={img}
-                                        alt=""
-                                        className="w-full h-full object-contain"
-                                        onError={(e) => e.currentTarget.style.display = 'none'}
-                                    />
-                                )
+                                renderItem(img)
                             )}
                         </div>
                     </CarouselItem>
