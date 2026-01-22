@@ -85,8 +85,18 @@ export default function Contact() {
     const subject = encodeURIComponent(`Contact from ${formData.name}`);
     const body = encodeURIComponent(`${formData.message}\r\n\r\nFrom: ${formData.name} (${formData.email})`);
 
+    // Handle mobile devices
+    if (isMobile) {
+      window.location.href = `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com'}?subject=${subject}&body=${body}`;
+      toast.success("Opening Mail App...", {
+        description: "Please send the pre-filled email to complete your message.",
+      });
+      setFormData({ name: "", email: "", message: "" });
+      return;
+    }
+
     // Open Gmail in a new tab using a hidden link to bypass some popup blockers
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=info@arrowsdesign.me&su=${subject}&body=${body}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com'}&su=${subject}&body=${body}`;
     const link = document.createElement('a');
     link.href = gmailUrl;
     link.target = '_blank';
