@@ -58,9 +58,9 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         heroDescription: "Crafting compelling visual stories through rhythm, pacing, and seamless transitions to engage audiences and convey messages effectively.",
         heroImage: "",
         gallery: [
-            "/projects/video edit/ads 1.mp4",
-            "/projects/video edit/ads 2.mp4",
-            "/projects/video edit/Noorun ala noor.mp4"
+            "/projects/video%20edit/ads%201.mp4",
+            "/projects/video%20edit/ads%202.mp4",
+            "/projects/video%20edit/Noorun%20ala%20noor.mp4"
         ],
         challenge: "To distill hours of raw footage into a concise, high-impact narrative that retains user attention across social media platforms.",
         solution: "Implemented fast-paced editing techniques with dynamic text overlays and sound design to create high-energy content optimized for engagement.",
