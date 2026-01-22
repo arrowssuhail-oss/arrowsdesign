@@ -28,7 +28,7 @@ const About = () => {
                         </div>
                         {/* Floating card */}
                         <div className="absolute -bottom-6 -right-6 bg-card shadow-2xl p-6 max-w-[240px] rounded-3xl border border-border/10">
-                            <p className="text-3xl font-bold text-[#00D2AA] dark:text-blue-500 mb-1">3+</p>
+                            <p className="text-3xl font-bold text-[#00D2AA] dark:text-blue-500 mb-1">3</p>
                             <p className="text-sm text-foreground/80 font-medium">Years of experience</p>
                         </div>
                     </div>
