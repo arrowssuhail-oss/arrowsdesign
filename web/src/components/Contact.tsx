@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
@@ -63,6 +63,16 @@ export default function Contact() {
   });
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -96,7 +106,9 @@ export default function Contact() {
       iconName: 'Mail',
       label: 'Email',
       value: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com',
-      href: `https://mail.google.com/mail/?view=cm&fs=1&to=${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com'}`
+      href: isMobile
+        ? `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com'}`
+        : `https://mail.google.com/mail/?view=cm&fs=1&to=${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com'}`
     },
     { iconName: 'Phone', label: 'Phone', value: '+91 9567438507', href: 'tel:+919567438507' },
     { iconName: 'MapPin', label: 'Location', value: 'Malappuram, Kerala' },
