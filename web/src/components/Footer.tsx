@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { LinkedinIcon } from "@/components/ui/linkedin-icon";
 import { LinkIcon } from "@/components/ui/link-icon";
 import { InstagramIcon } from "@/components/ui/instagram-icon";
 import { BehanceIcon } from "@/components/ui/behance-icon";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const socials = [
     { icon: LinkedinIcon, href: "https://www.linkedin.com/in/suhailbinsaidalavi/", label: "LinkedIn" },
@@ -12,12 +16,23 @@ const socials = [
 ];
 
 const Footer = () => {
+    const { theme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        return null;
+    }
+
     return (
         <footer className="py-12 border-t border-border/40 bg-background">
             <div className="max-w-6xl mx-auto px-6 flex flex-col items-center">
                 <Link href="/" className="mb-6 block h-14 w-auto hover:opacity-80 transition-opacity">
                     <img
-                        src="/logo white.png"
+                        src={theme === "light" ? "/logo dark.png" : "/logo white.png"}
                         alt="Arrows Design"
                         className="h-full w-auto object-contain"
                     />

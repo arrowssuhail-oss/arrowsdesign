@@ -34,7 +34,6 @@ export default async function RootLayout({
                         attribute="class"
                         defaultTheme="dark"
                         enableSystem={false}
-                        forcedTheme="dark"
                     >
                         <SmoothScroll />
                         {/* AuthSyncWrapper ensures user is created in MongoDB on first visit */}

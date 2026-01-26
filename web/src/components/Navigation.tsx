@@ -9,6 +9,7 @@ import { useTheme } from "next-themes";
 
 // Ensure StoryViewer exists or use placeholder
 import StoryViewer from "@/components/StoryViewer";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navLinks = [{
   name: "About",
@@ -136,7 +137,7 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
               <img
-                src="/logo white.png"
+                src={theme === "light" ? "/logo dark.png" : "/logo white.png"}
                 alt="arrows.in logo"
                 className="h-19 w-24 object-contain transition-all duration-300"
               />
@@ -171,6 +172,7 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
             </Link>)}
 
             {/* Dark Mode Toggle */}
+            <ThemeToggle />
           </div>
 
           {/* Mobile menu button */}
@@ -192,6 +194,9 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
                 Let's Talk
               </Button>
             </Link>
+            <div className="flex justify-center pt-4 border-t border-border/50">
+              <ThemeToggle />
+            </div>
           </div>
         </div>}
       </nav>
