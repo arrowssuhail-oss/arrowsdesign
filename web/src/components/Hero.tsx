@@ -5,6 +5,8 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from './ui/button';
 import LiquidEther from './LiquidEther';
 
+import RotatingText from './RotatingText';
+
 export default function Hero() {
   const scrollToContact = () => {
     const element = document.getElementById('contact');
@@ -33,10 +35,22 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tighter leading-tight">
-              Design. Build.
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tighter leading-[1.1] pb-2">
+              Hi, <span className="font-medium">I'm a.</span>
               <br />
-              <span className="text-gradient">Create Magic.</span>
+              {/* <span className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-medium tracking-tighter leading-[1.1] pb-2">I'm a </span> */}
+              <RotatingText
+                texts={['Designer.', 'Creator.', 'Web Developer.']}
+                mainClassName="text-primary inline-block"
+                staggerFrom="last"
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "-120%" }}
+                staggerDuration={0.025}
+                splitLevelClassName="overflow-hidden pb-2 sm:pb-2 md:pb-3"
+                transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                rotationInterval={2000}
+              />
             </h1>
           </motion.div>
 
