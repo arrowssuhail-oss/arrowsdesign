@@ -18,7 +18,7 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
         heroTitle: "Custom & Unique Identity",
         heroDescription: "A comprehensive brand identity project focusing on creating a distinct visual language that resonates with the target audience while maintaining professional versatility.",
         heroImage: "",
-        gallery: ["/Project-add-image/Id Card Mockup.jpg", "/Project-add-image/Id Card Mockup 2.jpg", "/Project-add-image/nw yr 1.jpg", "/Project-add-image/nw yr 2.jpg", "/Project-add-image/nw yr 3.jpg", "/Project-add-image/nw yr 4.jpg"],
+        gallery: ["/Project-add-image/Id Card Mockup.jpg", "/Project-add-image/Id Card Mockup 2.jpg", "/Project-add-image/nw yr 1.jpg", "/Project-add-image/nw yr 2.jpg", "/Project-add-image/nw yr 3.jpg", "/Project-add-image/nw yr 4.jpg", "/Project-add-image/Poster 1.jpg", "/Project-add-image/Poster 2.jpg", "/Project-add-image/Poster 3.jpg", "/Project-add-image/Poster 4.jpg", "/Project-add-image/Poster 5.jpg"],
         challenge: "The main challenge was to create a unique identity that stands out in a crowded market while maintaining a professional and trustworthy appeal. The client, a local tech startup, struggled with an outdated logo that looked like a construction firm. They needed a modern, tech-focused look to attract younger investors.",
         solution: "We developed a dynamic visual system based on circuit-board inspired geometric shapes and a neon-digital color palette to signal innovation. This approach allows for flexibility across various media while maintaining strong brand recognition.",
         role: "Graphic Designer",
@@ -75,6 +75,11 @@ export const defaultPageContent: Record<number, ProjectPageData> = {
                 type: 'video',
                 url: "https://drive.google.com/file/d/17fZqjTjne_1g9w31ovjWExI89xtjZx0f/view?usp=sharing",
                 thumbnail: "/projects/video%20edit/Video%203.png"
+            },
+            {
+                type: 'video',
+                url: "https://drive.google.com/file/d/1KkF42c3phWbqvAx4neAKozpcpuWIynS1/view?usp=sharing",
+                thumbnail: "/projects/video%20edit/Video%204.png"
             }
         ],
         challenge: "To distill hours of raw footage into a concise, high-impact narrative that retains user attention across social media platforms.",
