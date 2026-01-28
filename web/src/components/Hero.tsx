@@ -40,7 +40,7 @@ export default function Hero() {
               <br />
               {/* <span className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-medium tracking-tighter leading-[1.1] pb-2">I'm a </span> */}
               <RotatingText
-                texts={['Designer.', 'Creator.', 'Web Developer.']}
+                texts={['Designer.', 'Creator.', 'Web Developer.', 'Video Editor.']}
                 mainClassName="text-primary inline-block"
                 staggerFrom="last"
                 initial={{ y: "100%" }}
