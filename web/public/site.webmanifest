@@ -1,6 +1,6 @@
 {
-  "name": "Arrows Design",
-  "short_name": "Arrows",
+  "name": "Suhail",
+  "short_name": "Suhail",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#000000",
-  "background_color": "#340054",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "display": "standalone"
 }
