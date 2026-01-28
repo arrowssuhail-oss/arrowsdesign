@@ -16,7 +16,6 @@ import WhatsAppBtn from "@/components/WhatsAppBtn";
 export const metadata: Metadata = {
     title: "Portfolio of Muhammed Suhail",
     description: "Graphic Designer, Video Editor, Web Design & Branding",
-    // keywords: "Graphic Designer, Video Editor, Web Design & Branding",
 };
 
 export default async function RootLayout({
