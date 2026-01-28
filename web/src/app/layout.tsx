@@ -14,8 +14,30 @@ import MagneticWrapper from "@/components/ui/magnetic-wrapper";
 import WhatsAppBtn from "@/components/WhatsAppBtn";
 
 export const metadata: Metadata = {
+    metadataBase: new URL("https://arrowsdesign.me"),
     title: "Portfolio of Muhammed Suhail",
     description: "Graphic Designer, Video Editor, Web Design & Branding",
+    openGraph: {
+        title: "Portfolio of Muhammed Suhail",
+        description: "Graphic Designer, Video Editor, Web Design & Branding",
+        url: 'https://arrowsdesign.me',
+        siteName: 'Arrows Design',
+        locale: 'en_US',
+        type: 'website',
+    },
+    twitter: {
+        title: 'Portfolio of Muhammed Suhail',
+        description: 'Graphic Designer, Video Editor, Web Design & Branding',
+        card: 'summary_large_image',
+        images: [
+            {
+                url: 'https://arrowsdesign.me/og-image.png',
+                width: 1200,
+                height: 630,
+                alt: 'Portfolio of Muhammed Suhail',
+            },
+        ],
+    },
 };
 
 export default async function RootLayout({
