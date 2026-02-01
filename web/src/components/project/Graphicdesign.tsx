@@ -1,15 +1,17 @@
 "use client";
-import { ArrowLeft, Palette, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, Palette, CheckCircle, ChevronLeft, ChevronRight, X, Maximize2, ZoomIn } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { defaultPageContent, ProjectPageData } from "@/components/projectData";
 import { db } from "@/lib/storage";
-import { ProjectCarousel } from "@/components/ProjectCarousel";
 
 const Identity = () => {
     const [content, setContent] = useState<ProjectPageData>(defaultPageContent[1]);
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [visibleCount, setVisibleCount] = useState<number>(8);
+
 
     useEffect(() => {
         const loadContent = async () => {
@@ -30,37 +32,60 @@ const Identity = () => {
 
     const allImages = [content.heroImage, ...(content.gallery || [])].filter(Boolean);
 
+    const handleNext = useCallback(() => {
+        setSelectedIndex((prev) => (prev === null ? null : (prev + 1) % allImages.length));
+    }, [allImages.length]);
+
+    const handlePrev = useCallback(() => {
+        setSelectedIndex((prev) => (prev === null ? null : (prev - 1 + allImages.length) % allImages.length));
+    }, [allImages.length]);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (selectedIndex === null) return;
+            if (e.key === "Escape") setSelectedIndex(null);
+            if (e.key === "ArrowRight") handleNext();
+            if (e.key === "ArrowLeft") handlePrev();
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [selectedIndex, handleNext, handlePrev]);
+
     return (
         <div className="min-h-screen bg-background text-foreground">
             <Navbar />
 
             {/* Hero Section */}
             <section className="pt-32 pb-16 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <Link href="/#works" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8">
+                <div className="w-full max-w-[95%] xl:max-w-screen-2xl mx-auto px-4">
+                    <Link href="/#works" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-12">
                         <ArrowLeft className="w-4 h-4" />
                         Back to Projects
                     </Link>
 
-                    <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
-                        <div className="w-16 h-16 rounded-2xl bg-rose-500/20 flex items-center justify-center">
-                            <Palette className="w-8 h-8 text-rose-500" />
+                    <div className="grid md:grid-cols-2 gap-12 items-end">
+                        <div className="flex flex-col gap-6">
+                            <div className="w-16 h-16 rounded-2xl bg-rose-500/20 flex items-center justify-center">
+                                <Palette className="w-8 h-8 text-rose-500" />
+                            </div>
+                            <div>
+                                <span className="text-rose-500 text-sm font-medium uppercase tracking-widest">Graphic Design</span>
+                                <h1 className="text-4xl md:text-6xl font-bold mt-2 leading-tight">{content.heroTitle}</h1>
+                            </div>
                         </div>
-                        <div>
-                            <span className="text-rose-500 text-sm font-medium uppercase tracking-widest">Graphic Design</span>
-                            <h1 className="text-4xl md:text-6xl font-bold mt-2">{content.heroTitle}</h1>
+
+                        <div className="md:pb-2">
+                            <p className="text-xl text-muted-foreground">
+                                {content.heroDescription}
+                            </p>
                         </div>
                     </div>
-
-                    <p className="text-xl text-muted-foreground max-w-2xl">
-                        {content.heroDescription}
-                    </p>
                 </div>
             </section>
 
             {/* Project Visual */}
             <section className="px-6 pb-16">
-                <div className="max-w-6xl mx-auto">
+                <div className="w-full px-4">
                     {allImages.length === 0 ? (
                         <div className="aspect-video rounded-3xl bg-gradient-to-br from-rose-500/30 to-rose-500/5 flex items-center justify-center overflow-hidden relative">
                             <div className="absolute w-48 h-48 rounded-full bg-foreground/5 animate-float" style={{ top: '15%', left: '65%' }} />
@@ -69,14 +94,55 @@ const Identity = () => {
                             <Palette className="w-32 h-32 text-foreground/40" />
                         </div>
                     ) : (
-                        <ProjectCarousel images={allImages} />
+                        <>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                {allImages.slice(0, visibleCount).map((item, index) => {
+                                    let imageUrl = '';
+                                    if (typeof item === 'string') {
+                                        imageUrl = item;
+                                    } else if (item.type === 'image') {
+                                        imageUrl = item.url;
+                                    } else if (item.type === 'video') {
+                                        imageUrl = item.thumbnail;
+                                    }
+
+                                    if (!imageUrl) return null;
+
+                                    return (
+                                        <div
+                                            key={index}
+                                            onClick={() => setSelectedIndex(index)}
+                                            className="group relative overflow-hidden rounded-3xl bg-muted/20 aspect-square cursor-pointer"
+                                        >
+                                            <img
+                                                src={imageUrl}
+                                                alt={`Project image ${index + 1}`}
+                                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                            />
+                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {visibleCount < allImages.length && (
+                                <div className="mt-12 flex justify-center">
+                                    <button
+                                        onClick={() => setVisibleCount(prev => prev + 4)}
+                                        className="px-8 py-3 rounded-full bg-muted hover:bg-muted/80 text-foreground font-medium transition-colors"
+                                    >
+                                        Load More
+                                    </button>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
-            </section>
+            </section >
 
             {/* Project Details */}
-            <section className="px-6 py-16">
-                <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16">
+            < section className="px-6 py-16" >
+                <div className="w-full px-4 grid md:grid-cols-2 gap-16">
                     <div>
                         <h2 className="text-2xl font-bold mb-6">The Challenge</h2>
                         <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
@@ -90,26 +156,31 @@ const Identity = () => {
                         </p>
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* Deliverables */}
-            <section className="px-6 py-16 bg-muted/30">
-                <div className="max-w-6xl mx-auto">
+            < section className="px-6 py-16 bg-muted/30" >
+                <div className="w-full max-w-[95%] xl:max-w-screen-2xl mx-auto px-4">
                     <h2 className="text-3xl font-bold mb-12">Deliverables</h2>
-                    <div className="grid md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
                         {content.features.map((feature, index) => (
-                            <div key={index} className="flex items-start gap-3">
-                                <CheckCircle className="w-5 h-5 text-rose-500 mt-0.5" />
-                                <span>{feature}</span>
+                            <div key={index} className="bg-[#0B1221] p-6 rounded-2xl border border-white/5 flex flex-col gap-3 hover:border-rose-500/50 transition-colors group">
+                                <div className="w-10 h-10 rounded-lg bg-rose-500/10 flex items-center justify-center mb-2 group-hover:bg-rose-500/20 transition-colors">
+                                    <CheckCircle className="w-5 h-5 text-rose-500" />
+                                </div>
+                                <h3 className="text-white font-medium leading-tight">{feature}</h3>
+                                <p className="text-xs text-slate-400 leading-relaxed">
+                                    Professional grade deliverable included in this package.
+                                </p>
                             </div>
                         ))}
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* Project Info */}
-            <section className="px-6 py-16">
-                <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
+            < section className="px-6 py-16" >
+                <div className="w-full max-w-[95%] xl:max-w-screen-2xl mx-auto px-4 grid md:grid-cols-4 gap-8">
                     <div>
                         <span className="text-sm text-muted-foreground uppercase tracking-widest">Role</span>
                         <p className="text-lg font-medium mt-2">{content.role}</p>
@@ -155,10 +226,54 @@ const Identity = () => {
                         <p className="text-lg font-medium mt-2">{content.year}</p>
                     </div>
                 </div>
-            </section>
+            </section >
+
+            {/* Lightbox */}
+            {
+                selectedIndex !== null && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm animate-fade-in">
+                        {/* Controls */}
+                        <div className="absolute top-6 right-6 flex items-center gap-4 text-white/70 z-50">
+                            <span className="text-sm font-medium">{selectedIndex + 1} / {allImages.length}</span>
+                            <button onClick={() => setSelectedIndex(null)} className="p-2 hover:text-white transition-colors rounded-full hover:bg-white/10">
+                                <X className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        {/* Navigation Buttons */}
+                        <button
+                            onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+                            className="absolute left-6 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-50"
+                        >
+                            <ChevronLeft className="w-6 h-6" />
+                        </button>
+
+                        <button
+                            onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                            className="absolute right-6 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-50"
+                        >
+                            <ChevronRight className="w-6 h-6" />
+                        </button>
+
+                        {/* Image */}
+                        <div className="relative w-full h-full p-12 flex items-center justify-center" onClick={() => setSelectedIndex(null)}>
+                            <img
+                                src={
+                                    typeof allImages[selectedIndex] === 'string'
+                                        ? (allImages[selectedIndex] as string)
+                                        : (allImages[selectedIndex] as any).url || (allImages[selectedIndex] as any).thumbnail
+                                }
+                                alt="Full screen view"
+                                className="max-w-full max-h-full object-contain shadow-2xl rounded-sm"
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                        </div>
+                    </div>
+                )
+            }
 
             <Footer />
-        </div>
+        </div >
     );
 };
 

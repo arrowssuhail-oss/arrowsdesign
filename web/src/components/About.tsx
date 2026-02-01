@@ -76,7 +76,7 @@ const About = () => {
                             <p className="text-lg italic text-foreground/80">
                                 "Design is not just what it looks like, it's how it works."
                             </p>
-                            <p className="text-sm text-muted-foreground mt-2">— Muhammed Suhail </p>
+                            <p className="text-sm text-muted-foreground mt-2">— Steve Jobs </p>
                         </div>
                     </div>
                 </div>
