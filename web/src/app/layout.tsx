@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+// Font loaded via Google Fonts CDN in head
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -42,6 +43,11 @@ export default async function RootLayout({
     return (
         <ClerkProvider>
             <html lang="en" suppressHydrationWarning>
+                <head>
+                    <link rel="preconnect" href="https://fonts.googleapis.com" />
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet" />
+                </head>
                 <body>
                     <ThemeProvider
                         attribute="class"
