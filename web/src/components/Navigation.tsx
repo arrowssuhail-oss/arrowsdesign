@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Ensure StoryViewer exists or use placeholder
 import StoryViewer from "@/components/StoryViewer";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navLinks = [{
   name: "About",
@@ -35,6 +37,27 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [activeHash, setActiveHash] = useState("");
+
+  useEffect(() => {
+    // Determine active section based on path or hash
+    const getActiveHash = () => {
+      const hash = window.location.hash;
+      const path = window.location.pathname;
+
+      if (hash) return hash;
+      if (path === "/") return "#about"; // Default for home
+      if (path.startsWith("/project")) return "#works"; // Project pages -> Projects nav
+      if (path.startsWith("/resume")) return "#resume"; // Resume page -> Resume nav
+      return "";
+    };
+
+    setActiveHash(getActiveHash());
+
+    const handleHashChange = () => setActiveHash(getActiveHash());
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -119,6 +142,37 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
     localStorage.setItem("arrows_story_seen", storyData.timestamp.toString());
   };
 
+  // Custom Transition Logic
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const pathname = usePathname();
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // Only animate if staying on same page (hash nav) or explicit request
+    if (href.startsWith("/#") && pathname === "/") {
+      e.preventDefault();
+      setIsTransitioning(true);
+
+      setTimeout(() => {
+        // Perform navigation after "cover" is mostly active
+        const targetId = href.replace("/#", "");
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'instant' }); // Instant jump while hidden
+        }
+        window.history.pushState(null, '', href); // Update URL
+        setActiveHash(href.substring(1)); // Update active state
+
+        // Slight delay before revealing
+        setTimeout(() => {
+          setIsTransitioning(false);
+        }, 100);
+      }, 350); // Wait for exit animation
+    } else {
+      // Allow default next/link behavior for real page routes (handled by template.tsx)
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   const handleLinkClick = (href: string) => {
     // If it's a hash link, we might want to handle smooth scroll manually or let Next.js handle it.
     // Next.js Link handles ID scrolling automatically if it's on the same page.
@@ -128,17 +182,25 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
   return (
     <>
       <nav className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6",
-        isScrolled ? "py-4" : "py-6",
-        isVisible ? "translate-y-0" : "-translate-y-full"
+        "fixed top-4 left-0 right-0 z-50 transition-all duration-300 px-4",
+        isVisible ? "translate-y-0" : "-translate-y-[150%]"
       )}>
-        <div className={cn("max-w-6xl mx-auto flex items-center justify-between px-7 py-4 rounded-3xl transition-all duration-300", isScrolled ? "bg-background/80 backdrop-blur-xl shadow-md border border-border/50" : "")}>
+        <div className={cn(
+          "relative max-w-[95%] xl:max-w-screen-2xl mx-auto flex items-center justify-between px-6 py-3 rounded-full transition-all duration-300",
+          isScrolled
+            ? "bg-white/80 dark:bg-black/80 backdrop-blur-md shadow-lg border border-black/5 dark:border-white/10"
+            : "bg-transparent border-transparent shadow-none"
+        )}>
           <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+            <Link
+              href="/"
+              className="flex items-center"
+              onClick={(e) => handleNavClick(e, "/#hero")}
+            >
               <img
-                src="/logo white.png"
+                src={theme === "light" ? "/logo dark.png" : "/logo white.png"}
                 alt="arrows.in logo"
-                className="h-19 w-24 object-contain transition-all duration-300"
+                className="h-12 w-auto object-contain transition-all duration-300"
               />
             </Link>
 
@@ -164,23 +226,46 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
             )}
           </div>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map(link => <Link key={link.name} href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              {link.name}
-            </Link>)}
+          {/* Centered Desktop Nav */}
+          <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-16">
+            {navLinks.map(link => {
+              const targetHash = link.href.substring(1); // e.g., "#about"
+              const isActive = activeHash === targetHash;
 
-            {/* Dark Mode Toggle */}
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={cn(
+                    "relative text-sm font-medium transition-colors hover:text-foreground",
+                    isActive ? "text-foreground font-semibold" : "text-muted-foreground"
+                  )}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                >
+                  {link.name}
+                  {isActive && (
+                    <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-foreground rounded-full animate-fade-in" />
+                  )}
+                </Link>
+              );
+            })}
           </div>
 
-          {/* Mobile menu button */}
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
+          {/* Right Actions */}
+          <div className="flex items-center gap-4">
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
+
+            {/* Mobile menu button */}
+            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile menu */}
-        {isMobileMenuOpen && <div className="md:hidden mt-2 mx-auto max-w-6xl glass-card p-6 animate-fade-up bg-background/95 backdrop-blur-lg rounded-xl border border-white/10">
+        {isMobileMenuOpen && <div className="md:hidden mt-2 mx-auto max-w-[95%] xl:max-w-screen-2xl glass-card p-6 animate-fade-up bg-background/95 backdrop-blur-lg rounded-3xl border border-white/10 shadow-xl">
           <div className="flex flex-col gap-4">
             {navLinks.map(link => <Link key={link.name} href={link.href} className="text-foreground py-2 border-b border-border/50 last:border-0" onClick={() => setIsMobileMenuOpen(false)}>
               {link.name}
@@ -192,11 +277,27 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
                 Let's Talk
               </Button>
             </Link>
+            <div className="flex justify-center pt-4 border-t border-border/50">
+              <ThemeToggle />
+            </div>
           </div>
         </div>}
       </nav>
 
       {/* Story Overlay */}
+      {/* Custom Page Transition Overlay for Hash Links */}
+      <AnimatePresence>
+        {isTransitioning && (
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: "0%" }}
+            exit={{ x: "-100%" }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-[100] bg-background"
+          />
+        )}
+      </AnimatePresence>
+
       <StoryViewer
         isOpen={isStoryOpen}
         onClose={() => setIsStoryOpen(false)}

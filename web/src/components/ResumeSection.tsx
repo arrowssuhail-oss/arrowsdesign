@@ -149,7 +149,7 @@ const ResumeSection = () => {
                                         <div className="w-2 h-2 rounded-full bg-accent" />
                                     </div>
 
-                                    <div className="bg-card border border-border/50 p-6 rounded-3xl hover-lift transition-all duration-300 hover:border-accent/30 group">
+                                    <div className="bg-card border border-border/50 p-6 rounded-3xl hover-lift transition-all duration-300 hover:border-accent/30 hover:bg-accent/5 group">
                                         <span className="text-xs text-accent font-medium">{item.period}</span>
                                         <h4 className="text-lg font-semibold mt-2 group-hover:text-accent transition-colors">{item.title}</h4>
                                         <p className="text-muted-foreground text-sm mt-1">{item.company}</p>
@@ -187,7 +187,7 @@ const ResumeSection = () => {
                                         <div className="w-2 h-2 rounded-full bg-accent" />
                                     </div>
 
-                                    <div className="bg-card border border-border/50 p-6 rounded-3xl hover-lift transition-all duration-300 hover:border-accent/30 group">
+                                    <div className="bg-card border border-border/50 p-6 rounded-3xl hover-lift transition-all duration-300 hover:border-accent/30 hover:bg-accent/5 group">
                                         <span className="text-xs text-accent font-medium">{item.period}</span>
                                         <h4 className="text-lg font-semibold mt-2 group-hover:text-accent transition-colors">{item.title}</h4>
                                         <p className="text-muted-foreground text-sm mt-1">{item.institution}</p>

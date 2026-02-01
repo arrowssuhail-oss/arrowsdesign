@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
@@ -14,6 +14,29 @@ import { useRef } from 'react';
 const ContactInfoCard = ({ item, index }: { item: any, index: number }) => {
   const iconRef = useRef<AnimatedIconHandle>(null);
 
+  const content = (
+    <Card
+      className="rounded-3xl border-border/50 hover:border-accent/30 transition-all duration-500 bg-card hover-lift group"
+      onMouseEnter={() => iconRef.current?.startAnimation()}
+      onMouseLeave={() => iconRef.current?.stopAnimation()}
+    >
+      <CardContent className="p-6 flex items-center gap-5">
+        <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors duration-300">
+          <AnimatedIcon
+            ref={iconRef}
+            name={item.iconName}
+            className="w-7 h-7 text-accent"
+            size={28}
+          />
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground mb-1">{item.label}</p>
+          <p className="text-lg font-medium group-hover:text-accent transition-colors duration-300">{item.value}</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -21,26 +44,13 @@ const ContactInfoCard = ({ item, index }: { item: any, index: number }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <Card
-        className="rounded-3xl border-border/50 hover:border-accent/30 transition-all duration-500 bg-card hover-lift group"
-        onMouseEnter={() => iconRef.current?.startAnimation()}
-        onMouseLeave={() => iconRef.current?.stopAnimation()}
-      >
-        <CardContent className="p-6 flex items-center gap-5">
-          <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors duration-300">
-            <AnimatedIcon
-              ref={iconRef}
-              name={item.iconName}
-              className="w-7 h-7 text-accent"
-              size={28}
-            />
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground mb-1">{item.label}</p>
-            <p className="text-lg font-medium group-hover:text-accent transition-colors duration-300">{item.value}</p>
-          </div>
-        </CardContent>
-      </Card>
+      {item.href ? (
+        <a href={item.href} className="block">
+          {content}
+        </a>
+      ) : (
+        content
+      )}
     </motion.div>
   );
 };
@@ -53,6 +63,16 @@ export default function Contact() {
   });
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -65,8 +85,18 @@ export default function Contact() {
     const subject = encodeURIComponent(`Contact from ${formData.name}`);
     const body = encodeURIComponent(`${formData.message}\r\n\r\nFrom: ${formData.name} (${formData.email})`);
 
+    // Handle mobile devices
+    if (isMobile) {
+      window.location.href = `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com'}?subject=${subject}&body=${body}`;
+      toast.success("Opening Mail App...", {
+        description: "Please send the pre-filled email to complete your message.",
+      });
+      setFormData({ name: "", email: "", message: "" });
+      return;
+    }
+
     // Open Gmail in a new tab using a hidden link to bypass some popup blockers
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=arrows.suhail@gmail.com&su=${subject}&body=${body}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com'}&su=${subject}&body=${body}`;
     const link = document.createElement('a');
     link.href = gmailUrl;
     link.target = '_blank';
@@ -82,8 +112,15 @@ export default function Contact() {
   };
 
   const contactInfo = [
-    { iconName: 'Mail', label: 'Email', value: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com' },
-    { iconName: 'Phone', label: 'Phone', value: '+91 9567438507' },
+    {
+      iconName: 'Mail',
+      label: 'Email',
+      value: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com',
+      href: isMobile
+        ? `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com'}`
+        : `https://mail.google.com/mail/?view=cm&fs=1&to=${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com'}`
+    },
+    { iconName: 'Phone', label: 'Phone', value: '+91 9567438507', href: 'tel:+919567438507' },
     { iconName: 'MapPin', label: 'Location', value: 'Malappuram, Kerala' },
   ];
 

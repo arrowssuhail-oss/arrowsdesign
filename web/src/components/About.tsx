@@ -40,7 +40,7 @@ const About = () => {
                             <ShinyText
                                 text="Hello, I am"
                                 speed={3}
-                                color="rgba(255, 255, 255, 0.8)"
+                                color="hsl(var(--foreground))"
                                 shineColor="#3b82f6"
                                 className="text-3xl md:text-4xl py-0.5"
                             />
@@ -48,7 +48,7 @@ const About = () => {
                             <ShinyText
                                 text="Muhammed Suhail"
                                 speed={3}
-                                color="rgba(255, 255, 255, 0.8)"
+                                color="hsl(var(--foreground))"
                                 shineColor="#3b82f6"
                                 className="py-0.0001"
                             />
@@ -58,16 +58,16 @@ const About = () => {
                                 <ShinyText
                                     text=" A self-taught and passionate Graphic Designer and Video Editor based in Malappuram, Kerala, India. I have created Numerous Social Media creatives and Printable works, Continually Learning and Researching to Expand my expertise. My exploration spans various fields of graphic design, including Video Editing"
                                     speed={5}
-                                    color="rgba(255, 255, 255, 0.6)"
-                                    shineColor="#ffffff"
+                                    color="hsl(var(--muted-foreground))"
+                                    shineColor="hsl(var(--foreground))"
                                 />
                             </div>
                             <div className="animate-fade-up-scroll">
                                 <ShinyText
                                     text="As a designer, I excel at creating innovative designs and delivering compelling presentations. My passion also extends to mentoring and instructing aspiring graphic designers, helping them develop their skills and achieve their creative potential."
                                     speed={5}
-                                    color="rgba(255, 255, 255, 0.6)"
-                                    shineColor="#ffffff"
+                                    color="hsl(var(--muted-foreground))"
+                                    shineColor="hsl(var(--foreground))"
                                 />
                             </div>
                         </div>
@@ -76,7 +76,7 @@ const About = () => {
                             <p className="text-lg italic text-foreground/80">
                                 "Design is not just what it looks like, it's how it works."
                             </p>
-                            <p className="text-sm text-muted-foreground mt-2">— Muhammed Suhail </p>
+                            <p className="text-sm text-muted-foreground mt-2">— Steve Jobs </p>
                         </div>
                     </div>
                 </div>

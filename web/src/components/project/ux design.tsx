@@ -36,30 +36,34 @@ const HumanCenteredDesign = () => {
 
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-6">
-        <div className="max-w-6xl mx-auto">
-          <Link href="/#works" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8">
+        <div className="w-full max-w-[95%] xl:max-w-screen-2xl mx-auto px-4">
+          <Link href="/#works" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-12">
             <ArrowLeft className="w-4 h-4" />
             Back to Projects
           </Link>
 
-          <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center">
-              <ChartNoAxesGantt className="w-8 h-8 text-accent" />
+          <div className="grid md:grid-cols-2 gap-12 items-end">
+            <div className="flex flex-col gap-6">
+              <div className="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center">
+                <ChartNoAxesGantt className="w-8 h-8 text-accent" />
+              </div>
+              <div>
+                <span className="text-accent text-sm font-medium uppercase tracking-widest">UI/UX Design</span>
+                <h1 className="text-4xl md:text-6xl font-bold mt-2 leading-tight">{content.heroTitle}</h1>
+              </div>
             </div>
-            <div>
-              <span className="text-accent text-sm font-medium uppercase tracking-widest">UI/UX Design</span>
-              <h1 className="text-4xl md:text-6xl font-bold mt-2">{content.heroTitle}</h1>
+
+            <div className="md:pb-2">
+              <p className="text-xl text-muted-foreground">
+                {content.heroDescription}
+              </p>
             </div>
           </div>
-
-          <p className="text-xl text-muted-foreground max-w-2xl">
-            {content.heroDescription}
-          </p>
         </div>
       </section>
 
       <section className="px-6 pb-16">
-        <div className="max-w-6xl mx-auto">
+        <div className="w-full max-w-[95%] xl:max-w-screen-2xl mx-auto px-4">
           {allImages.length === 0 ? (
             <div className="aspect-video rounded-3xl bg-gradient-to-br from-accent/40 to-accent/10 flex items-center justify-center overflow-hidden relative">
               <div className="absolute w-64 h-64 rounded-lg bg-foreground/5 animate-float" style={{ top: '10%', left: '60%' }} />
@@ -75,7 +79,7 @@ const HumanCenteredDesign = () => {
 
       {/* Project Details */}
       <section className="px-6 py-16">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16">
+        <div className="w-full max-w-[95%] xl:max-w-screen-2xl mx-auto px-4 grid md:grid-cols-2 gap-16">
           <div>
             <h2 className="text-2xl font-bold mb-6">The Challenge</h2>
             <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
@@ -93,13 +97,18 @@ const HumanCenteredDesign = () => {
 
       {/* Key Features */}
       <section className="px-6 py-16 bg-muted/30">
-        <div className="max-w-6xl mx-auto">
+        <div className="w-full max-w-[95%] xl:max-w-screen-2xl mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12">Key Features</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {content.features.map((feature, index) => (
-              <div key={index} className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-accent mt-0.5" />
-                <span>{feature}</span>
+              <div key={index} className="bg-[#0B1221] p-6 rounded-2xl border border-white/5 flex flex-col gap-3 hover:border-accent/50 transition-colors group">
+                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-2 group-hover:bg-accent/20 transition-colors">
+                  <CheckCircle className="w-5 h-5 text-accent" />
+                </div>
+                <h3 className="text-white font-medium leading-tight">{feature}</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Professional grade deliverable included in this package.
+                </p>
               </div>
             ))}
           </div>
@@ -108,7 +117,7 @@ const HumanCenteredDesign = () => {
 
       {/* Project Info */}
       <section className="px-6 py-16">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
+        <div className="w-full max-w-[95%] xl:max-w-screen-2xl mx-auto px-4 grid md:grid-cols-4 gap-8">
           <div>
             <span className="text-sm text-muted-foreground uppercase tracking-widest">Role</span>
             <p className="text-lg font-medium mt-2">{content.role}</p>
