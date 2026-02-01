@@ -129,11 +129,13 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
   return (
     <>
       <nav className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6",
-        isScrolled ? "py-4" : "py-6",
-        isVisible ? "translate-y-0" : "-translate-y-full"
+        "fixed top-4 left-0 right-0 z-50 transition-all duration-300 px-4",
+        isVisible ? "translate-y-0" : "-translate-y-[150%]"
       )}>
-        <div className={cn("max-w-6xl mx-auto flex items-center justify-between px-7 py-4 rounded-3xl transition-all duration-300", isScrolled ? "bg-background/80 backdrop-blur-xl shadow-md border border-border/50" : "")}>
+        <div className={cn(
+          "relative max-w-[95%] xl:max-w-screen-2xl mx-auto flex items-center justify-between px-6 py-3 rounded-full transition-all duration-300",
+          "bg-white/80 dark:bg-black/80 backdrop-blur-md shadow-lg border border-black/5 dark:border-white/10"
+        )}>
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
               <img
@@ -165,24 +167,28 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
             )}
           </div>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map(link => <Link key={link.name} href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          {/* Centered Desktop Nav */}
+          <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
+            {navLinks.map(link => <Link key={link.name} href={link.href} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               {link.name}
             </Link>)}
-
-            {/* Dark Mode Toggle */}
-            <ThemeToggle />
           </div>
 
-          {/* Mobile menu button */}
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
+          {/* Right Actions */}
+          <div className="flex items-center gap-4">
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
+
+            {/* Mobile menu button */}
+            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile menu */}
-        {isMobileMenuOpen && <div className="md:hidden mt-2 mx-auto max-w-6xl glass-card p-6 animate-fade-up bg-background/95 backdrop-blur-lg rounded-xl border border-white/10">
+        {isMobileMenuOpen && <div className="md:hidden mt-2 mx-auto max-w-[95%] xl:max-w-screen-2xl glass-card p-6 animate-fade-up bg-background/95 backdrop-blur-lg rounded-3xl border border-white/10 shadow-xl">
           <div className="flex flex-col gap-4">
             {navLinks.map(link => <Link key={link.name} href={link.href} className="text-foreground py-2 border-b border-border/50 last:border-0" onClick={() => setIsMobileMenuOpen(false)}>
               {link.name}
