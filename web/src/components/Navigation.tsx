@@ -1,12 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Moon, Sun } from "lucide-react";
+import { Menu as MenuIcon, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { motion, AnimatePresence } from "framer-motion";
+
+import { Menu, MenuItem, HoveredLink, ProductItem } from "./ui/navbar-menu";
+import { defaultProjects } from "./Projects";
 
 // Ensure StoryViewer exists or use placeholder
 import StoryViewer from "@/components/StoryViewer";
@@ -38,6 +40,7 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [activeHash, setActiveHash] = useState("");
+  const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
     // Determine active section based on path or hash
@@ -142,41 +145,13 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
     localStorage.setItem("arrows_story_seen", storyData.timestamp.toString());
   };
 
-  // Custom Transition Logic
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const pathname = usePathname();
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    // Only animate if staying on same page (hash nav) or explicit request
-    if (href.startsWith("/#") && pathname === "/") {
-      e.preventDefault();
-      setIsTransitioning(true);
-
-      setTimeout(() => {
-        // Perform navigation after "cover" is mostly active
-        const targetId = href.replace("/#", "");
-        const element = document.getElementById(targetId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'instant' }); // Instant jump while hidden
-        }
-        window.history.pushState(null, '', href); // Update URL
-        setActiveHash(href.substring(1)); // Update active state
-
-        // Slight delay before revealing
-        setTimeout(() => {
-          setIsTransitioning(false);
-        }, 100);
-      }, 350); // Wait for exit animation
-    } else {
-      // Allow default next/link behavior for real page routes (handled by template.tsx)
-      setIsMobileMenuOpen(false);
-    }
-  };
-
-  const handleLinkClick = (href: string) => {
-    // If it's a hash link, we might want to handle smooth scroll manually or let Next.js handle it.
-    // Next.js Link handles ID scrolling automatically if it's on the same page.
+  const handleNavClick = (_: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     setIsMobileMenuOpen(false);
+    if (href.startsWith("/#")) {
+      setActiveHash(href.substring(1));
+    }
   };
 
   return (
@@ -226,29 +201,57 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
             )}
           </div>
 
-          {/* Centered Desktop Nav */}
-          <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-16">
-            {navLinks.map(link => {
-              const targetHash = link.href.substring(1); // e.g., "#about"
-              const isActive = activeHash === targetHash;
+          {/* Centered Desktop Nav - REPLACED WITH MENU */}
+          <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center">
+            {/* Using transparent Menu to just get the grouping/behavior if any, mostly allows generic structure */}
+            <Menu setActive={setActive} className="bg-transparent dark:bg-transparent shadow-none border-none py-0 px-0">
+              {navLinks.map(link => {
+                const isActive = activeHash === link.href.substring(1);
 
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={cn(
-                    "relative text-sm font-medium transition-colors hover:text-foreground",
-                    isActive ? "text-foreground font-semibold" : "text-muted-foreground"
-                  )}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                >
-                  {link.name}
-                  {isActive && (
-                    <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-foreground rounded-full animate-fade-in" />
-                  )}
-                </Link>
-              );
-            })}
+                if (link.name === "Projects") {
+                  return (
+                    <MenuItem
+                      key={link.name}
+                      setActive={setActive}
+                      active={active}
+                      item={link.name}
+                      href={link.href}
+                      onClick={(e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(e, link.href)}
+                      className={cn(
+                        isActive ? "text-foreground font-bold underline decoration-2 underline-offset-8 decoration-foreground" : "text-muted-foreground font-medium"
+                      )}
+                    >
+                      <div className="text-sm grid grid-cols-2 gap-10 p-4 w-[800px]">
+                        {defaultProjects.map((project) => (
+                          <ProductItem
+                            key={project.id}
+                            title={project.category}
+                            href={project.link}
+                            src={project.image}
+                            description={project.title}
+                          />
+                        ))}
+                      </div>
+                    </MenuItem>
+                  );
+                }
+
+                return (
+                  <HoveredLink
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(e, link.href)}
+                    className={cn(
+                      "text-sm transition-colors hover:text-foreground",
+                      isActive ? "text-foreground font-bold underline decoration-2 underline-offset-8 decoration-foreground" : "text-muted-foreground font-medium"
+                    )}
+                    onMouseEnter={() => setActive(null)}
+                  >
+                    {link.name}
+                  </HoveredLink>
+                )
+              })}
+            </Menu>
           </div>
 
           {/* Right Actions */}
@@ -259,7 +262,7 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
 
             {/* Mobile menu button */}
             <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
             </Button>
           </div>
         </div>
@@ -286,17 +289,7 @@ const Navbar = ({ stories = [] }: { stories?: any[] }) => {
 
       {/* Story Overlay */}
       {/* Custom Page Transition Overlay for Hash Links */}
-      <AnimatePresence>
-        {isTransitioning && (
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: "0%" }}
-            exit={{ x: "-100%" }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[100] bg-background"
-          />
-        )}
-      </AnimatePresence>
+
 
       <StoryViewer
         isOpen={isStoryOpen}
