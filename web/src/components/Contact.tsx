@@ -60,6 +60,7 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: '',
     message: '',
   });
 
@@ -87,6 +88,7 @@ export default function Contact() {
     const formDataObj = new FormData();
     formDataObj.append("name", formData.name);
     formDataObj.append("email", formData.email);
+    formDataObj.append("subject", formData.subject);
     formDataObj.append("message", formData.message);
 
     try {
@@ -96,7 +98,7 @@ export default function Contact() {
         toast.success("Message sent!", {
           description: "Thank you for getting in touch. I'll get back to you soon.",
         });
-        setFormData({ name: "", email: "", message: "" });
+        setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
         toast.error("Failed to send message", {
           description: result.message || "Please try again later or use the direct email link.",
@@ -191,6 +193,29 @@ export default function Contact() {
                       className={`rounded-xl transition-all duration-300 ${focusedField === 'email' ? 'ring-2 ring-primary shadow-glow' : ''
                         }`}
                     />
+                  </div>
+
+                  {/* Subject Field */}
+                  <div className="space-y-2">
+                    <Label htmlFor="subject" className="text-sm font-medium">
+                      Subject
+                    </Label>
+                    <select
+                      id="subject"
+                      name="subject"
+                      required
+                      className={`flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300 ${focusedField === 'subject' ? 'ring-2 ring-primary shadow-glow' : ''
+                        }`}
+                      value={formData.subject}
+                      onChange={(e: any) => handleChange(e)}
+                      onFocus={() => setFocusedField('subject')}
+                      onBlur={() => setFocusedField(null)}
+                    >
+                      <option value="" disabled>Select a topic...</option>
+                      <option value="project">Start a Project</option>
+                      <option value="hiring">Join the Team</option>
+                      <option value="general">General Inquiry</option>
+                    </select>
                   </div>
 
                   {/* Message Field */}
