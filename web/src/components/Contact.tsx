@@ -60,13 +60,13 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
     message: '',
   });
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -88,17 +88,14 @@ export default function Contact() {
     const formDataObj = new FormData();
     formDataObj.append("name", formData.name);
     formDataObj.append("email", formData.email);
-    formDataObj.append("subject", formData.subject);
     formDataObj.append("message", formData.message);
 
     try {
       const result = await sendContactEmail(formDataObj);
 
       if (result.success) {
-        toast.success("Message sent!", {
-          description: "Thank you for getting in touch. I'll get back to you soon.",
-        });
-        setFormData({ name: "", email: "", subject: "", message: "" });
+        setIsSubmitted(true);
+        setFormData({ name: "", email: "", message: "" });
       } else {
         toast.error("Failed to send message", {
           description: result.message || "Please try again later or use the direct email link.",
@@ -153,101 +150,103 @@ export default function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <Card className="rounded-[2.5rem] border-border/50 shadow-elegant bg-card hover-lift transition-all duration-500 hover:border-accent/30">
-              <CardContent className="p-8">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Name Field */}
-                  <div className="space-y-2">
-                    <Label htmlFor="name" className="text-sm font-medium">
-                      Name
-                    </Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      onFocus={() => setFocusedField('name')}
-                      onBlur={() => setFocusedField(null)}
-                      placeholder="Your name"
-                      required
-                      className={`rounded-xl transition-all duration-300 ${focusedField === 'name' ? 'ring-2 ring-primary shadow-glow' : ''
-                        }`}
-                    />
-                  </div>
-
-                  {/* Email Field */}
-                  <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-medium">
-                      Email
-                    </Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      onFocus={() => setFocusedField('email')}
-                      onBlur={() => setFocusedField(null)}
-                      placeholder="your@email.com"
-                      required
-                      className={`rounded-xl transition-all duration-300 ${focusedField === 'email' ? 'ring-2 ring-primary shadow-glow' : ''
-                        }`}
-                    />
-                  </div>
-
-                  {/* Subject Field */}
-                  <div className="space-y-2">
-                    <Label htmlFor="subject" className="text-sm font-medium">
-                      Subject
-                    </Label>
-                    <select
-                      id="subject"
-                      name="subject"
-                      required
-                      className={`flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300 ${focusedField === 'subject' ? 'ring-2 ring-primary shadow-glow' : ''
-                        }`}
-                      value={formData.subject}
-                      onChange={(e: any) => handleChange(e)}
-                      onFocus={() => setFocusedField('subject')}
-                      onBlur={() => setFocusedField(null)}
-                    >
-                      <option value="" disabled>Select a topic...</option>
-                      <option value="project">Start a Project</option>
-                      <option value="hiring">Join the Team</option>
-                      <option value="general">General Inquiry</option>
-                    </select>
-                  </div>
-
-                  {/* Message Field */}
-                  <div className="space-y-2">
-                    <Label htmlFor="message" className="text-sm font-medium">
-                      Message
-                    </Label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      onFocus={() => setFocusedField('message')}
-                      onBlur={() => setFocusedField(null)}
-                      placeholder="Tell me about your project..."
-                      required
-                      rows={6}
-                      className={`rounded-xl transition-all duration-300 resize-none ${focusedField === 'message' ? 'ring-2 ring-primary shadow-glow' : ''
-                        }`}
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <Button
-                    type="submit"
-                    size="lg"
-                    disabled={isSubmitting}
-                    className="w-full rounded-2xl text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground shadow-glow-accent transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:hover:scale-100"
+            <Card className="rounded-[2.5rem] border-border/50 shadow-elegant bg-card hover-lift transition-all duration-500 hover:border-accent/30 relative overflow-hidden min-h-[500px] flex flex-col justify-center">
+              <CardContent className="p-8 relative">
+                {isSubmitted ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex flex-col items-center justify-center text-center space-y-6 py-10"
                   >
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                  </Button>
-                </form>
+                    <div className="w-20 h-20 rounded-full bg-accent/10 flex items-center justify-center text-accent mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                      </svg>
+                    </div>
+                    <h3 className="text-3xl font-bold tracking-tight">Message Sent!</h3>
+                    <p className="text-muted-foreground max-w-[280px]">
+                      Thank you for reaching out. We will get back to you shortly.
+                    </p>
+                    <button
+                      onClick={() => setIsSubmitted(false)}
+                      className="mt-6 font-semibold text-accent hover:text-accent/80 transition-colors"
+                    >
+                      Send another message
+                    </button>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Name Field */}
+                    <div className="space-y-2">
+                      <Label htmlFor="name" className="text-sm font-medium">
+                        Name
+                      </Label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField('name')}
+                        onBlur={() => setFocusedField(null)}
+                        placeholder="Your name"
+                        required
+                        className={`rounded-xl transition-all duration-300 ${focusedField === 'name' ? 'ring-2 ring-primary shadow-glow' : ''
+                          }`}
+                      />
+                    </div>
+
+                    {/* Email Field */}
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm font-medium">
+                        Email
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField('email')}
+                        onBlur={() => setFocusedField(null)}
+                        placeholder="your@email.com"
+                        required
+                        className={`rounded-xl transition-all duration-300 ${focusedField === 'email' ? 'ring-2 ring-primary shadow-glow' : ''
+                          }`}
+                      />
+                    </div>
+
+                    {/* Message Field */}
+                    <div className="space-y-2">
+                      <Label htmlFor="message" className="text-sm font-medium">
+                        Message
+                      </Label>
+                      <Textarea
+                        id="message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField('message')}
+                        onBlur={() => setFocusedField(null)}
+                        placeholder="Tell me about your project..."
+                        required
+                        rows={6}
+                        className={`rounded-xl transition-all duration-300 resize-none ${focusedField === 'message' ? 'ring-2 ring-primary shadow-glow' : ''
+                          }`}
+                      />
+                    </div>
+
+                    {/* Submit Button */}
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={isSubmitting}
+                      className="w-full rounded-2xl text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground shadow-glow-accent transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:hover:scale-100"
+                    >
+                      {isSubmitting ? "Sending..." : "Send Message"}
+                    </Button>
+                  </form>
+                )}
               </CardContent>
             </Card>
           </motion.div>
