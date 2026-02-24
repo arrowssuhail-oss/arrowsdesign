@@ -7,6 +7,7 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 import { toast } from 'sonner';
+import { sendContactEmail } from '@/actions/contact';
 
 import { AnimatedIcon, AnimatedIconHandle } from '@/components/ui/animated-icon';
 import { useRef } from 'react';
@@ -64,6 +65,7 @@ export default function Contact() {
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -78,37 +80,35 @@ export default function Contact() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
-    // Construct Gmail URL
-    const subject = encodeURIComponent(`Contact from ${formData.name}`);
-    const body = encodeURIComponent(`${formData.message}\r\n\r\nFrom: ${formData.name} (${formData.email})`);
+    const formDataObj = new FormData();
+    formDataObj.append("name", formData.name);
+    formDataObj.append("email", formData.email);
+    formDataObj.append("message", formData.message);
 
-    // Handle mobile devices
-    if (isMobile) {
-      window.location.href = `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com'}?subject=${subject}&body=${body}`;
-      toast.success("Opening Mail App...", {
-        description: "Please send the pre-filled email to complete your message.",
+    try {
+      const result = await sendContactEmail(formDataObj);
+
+      if (result.success) {
+        toast.success("Message sent!", {
+          description: "Thank you for getting in touch. I'll get back to you soon.",
+        });
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        toast.error("Failed to send message", {
+          description: result.message || "Please try again later or use the direct email link.",
+        });
+      }
+    } catch (error) {
+      toast.error("An error occurred", {
+        description: "Please try again later or use the direct email link.",
       });
-      setFormData({ name: "", email: "", message: "" });
-      return;
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // Open Gmail in a new tab using a hidden link to bypass some popup blockers
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@example.com'}&su=${subject}&body=${body}`;
-    const link = document.createElement('a');
-    link.href = gmailUrl;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    toast.success("Opening Gmail...", {
-      description: "Please send the pre-filled email to complete your message.",
-    });
-    setFormData({ name: "", email: "", message: "" });
   };
 
   const contactInfo = [
@@ -217,9 +217,10 @@ export default function Contact() {
                   <Button
                     type="submit"
                     size="lg"
-                    className="w-full rounded-2xl text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground shadow-glow-accent transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+                    disabled={isSubmitting}
+                    className="w-full rounded-2xl text-base font-semibold bg-accent hover:bg-accent/90 text-accent-foreground shadow-glow-accent transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:hover:scale-100"
                   >
-                    Send Message
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
               </CardContent>
