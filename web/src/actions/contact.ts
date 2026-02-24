@@ -16,7 +16,7 @@ export async function sendContactEmail(formData: FormData) {
     try {
         const data = await resend.emails.send({
             from: 'Contact Form <onboarding@resend.dev>', // Update this when you have a verified domain
-            to: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'info@arrowsdesign.me',
+            to: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'arrows.suhail@gmail.com',
             replyTo: email,
             subject: `New Contact Form Submission from ${name}`,
             text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
