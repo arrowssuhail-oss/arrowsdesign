@@ -1,23 +1,25 @@
-
 'use server';
 
 import { revalidatePath } from "next/cache";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+import clientPromise from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 
 export async function getStories() {
-    // Temporary disable backend for Vercel deployment
-    return [];
-    /*
     try {
-        const res = await fetch(`${API_URL}/stories`, { cache: 'no-store' });
-        if (!res.ok) throw new Error('Failed to fetch stories');
-        return await res.json();
+        const client = await clientPromise;
+        const db = client.db('arrowsdesign');
+
+        // Fetch stories that are explicitly NOT archived, or where archived doesn't exist
+        const stories = await db.collection("stories").find({ archived: { $ne: true } }).sort({ createdAt: -1 }).toArray();
+
+        return stories.map(story => ({
+            ...story,
+            _id: story._id.toString()
+        }));
     } catch (error) {
         console.error("Error fetching stories:", error);
         return [];
     }
-    */
 }
 
 export async function createStory(prevState: any, formData: FormData) {
@@ -30,24 +32,33 @@ export async function createStory(prevState: any, formData: FormData) {
     }
 
     try {
-        const res = await fetch(`${API_URL}/stories`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mediaUrl, mediaType, caption })
-        });
+        const client = await clientPromise;
+        const db = client.db('arrowsdesign');
 
-        if (!res.ok) throw new Error('Failed to create story');
+        await db.collection("stories").insertOne({
+            mediaUrl,
+            mediaType,
+            caption: caption || '',
+            archived: false,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        });
 
         revalidatePath("/dashboard/stories");
         return { message: "Story created successfully" };
     } catch (e) {
+        console.error("Failed to create story:", e);
         return { message: "Failed to create story" };
     }
 }
 
 export async function deleteStory(id: string) {
     try {
-        await fetch(`${API_URL}/stories/${id}`, { method: 'DELETE' });
+        const client = await clientPromise;
+        const db = client.db('arrowsdesign');
+
+        await db.collection("stories").deleteOne({ _id: new ObjectId(id) });
+
         revalidatePath("/dashboard/stories");
     } catch (e) {
         console.error("Failed to delete story:", e);
@@ -56,7 +67,14 @@ export async function deleteStory(id: string) {
 
 export async function archiveStory(id: string) {
     try {
-        await fetch(`${API_URL}/stories/${id}/archive`, { method: 'PATCH' });
+        const client = await clientPromise;
+        const db = client.db('arrowsdesign');
+
+        await db.collection("stories").updateOne(
+            { _id: new ObjectId(id) },
+            { $set: { archived: true, updatedAt: new Date() } }
+        );
+
         revalidatePath("/dashboard/stories");
     } catch (e) {
         console.error("Failed to archive story:", e);

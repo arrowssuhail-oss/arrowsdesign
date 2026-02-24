@@ -1,11 +1,10 @@
-
 'use server';
 
 import { encrypt } from "../lib/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+import clientPromise from "@/lib/mongodb";
+import bcrypt from "bcrypt";
 
 export async function login(prevState: any, formData: FormData) {
     const email = formData.get("email") as string;
@@ -16,23 +15,26 @@ export async function login(prevState: any, formData: FormData) {
     }
 
     try {
-        const res = await fetch(`${API_URL}/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
+        const client = await clientPromise;
+        const db = client.db('arrowsdesign');
 
-        const data = await res.json();
+        const user = await db.collection("users").findOne({ email });
 
-        if (!data.success) {
-            return { message: data.message || "Invalid credentials" };
+        if (!user) {
+            return { message: "Invalid credentials" };
         }
 
-        // Create Session with data returned from API
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            return { message: "Invalid credentials" };
+        }
+
+        // Create Session with data returned from DB
         const session = await encrypt({
-            email: data.user.email,
-            role: data.user.role,
-            id: data.user.id
+            email: user.email,
+            role: user.role || 'user',
+            id: user._id.toString()
         });
 
         // Set Cookie
@@ -44,8 +46,8 @@ export async function login(prevState: any, formData: FormData) {
         });
 
     } catch (e) {
-        console.error("Login call failed:", e);
-        return { message: e instanceof Error ? e.message : "Connection failed to backend" };
+        console.error("Login failed:", e);
+        return { message: e instanceof Error ? e.message : "Database connection failed" };
     }
 
     redirect("/dashboard");

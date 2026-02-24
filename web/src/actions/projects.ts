@@ -1,26 +1,24 @@
-
 'use server';
 
 import { revalidatePath } from "next/cache";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+import clientPromise from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 
 export async function getProjects() {
-    // Temporary disable backend for Vercel deployment
-    return [];
-    /*
     try {
-        const res = await fetch(`${API_URL}/projects`, { cache: 'no-store' });
-        if (!res.ok) throw new Error('Failed to fetch projects');
-        return await res.json();
-    } catch (error: any) {
-        console.error("Error fetching projects:");
-        console.error("  Raw API_URL:", API_URL);
-        console.error("  Target URL:", `${API_URL}/projects`);
-        console.error("  Error Details:", error.message, error.cause);
+        const client = await clientPromise;
+        const db = client.db('arrowsdesign');
+
+        const projects = await db.collection("projects").find({}).sort({ createdAt: -1 }).toArray();
+
+        return projects.map(proj => ({
+            ...proj,
+            _id: proj._id.toString()
+        }));
+    } catch (error) {
+        console.error("Error fetching projects:", error);
         return [];
     }
-    */
 }
 
 export async function createProject(prevState: any, formData: FormData) {
@@ -38,17 +36,23 @@ export async function createProject(prevState: any, formData: FormData) {
     const tags = tagsStr ? tagsStr.split(',').map(s => s.trim()) : [];
 
     try {
-        const res = await fetch(`${API_URL}/projects`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, description, link, images, tags })
-        });
+        const client = await clientPromise;
+        const db = client.db('arrowsdesign');
 
-        if (!res.ok) throw new Error('Failed to create project');
+        await db.collection("projects").insertOne({
+            title,
+            description,
+            link,
+            images,
+            tags,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        });
 
         revalidatePath("/dashboard/cms");
         return { message: "Project created successfully" };
     } catch (e) {
+        console.error("Failed to create project:", e);
         return { message: "Failed to create project" };
     }
 }
@@ -65,28 +69,34 @@ export async function updateProject(id: string, prevState: any, formData: FormDa
         description,
         link,
         images: imagesStr ? imagesStr.split(',').map(s => s.trim()) : [],
-        tags: tagsStr ? tagsStr.split(',').map(s => s.trim()) : []
+        tags: tagsStr ? tagsStr.split(',').map(s => s.trim()) : [],
+        updatedAt: new Date()
     };
 
     try {
-        const res = await fetch(`${API_URL}/projects/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updateData)
-        });
+        const client = await clientPromise;
+        const db = client.db('arrowsdesign');
 
-        if (!res.ok) throw new Error('Failed to update project');
+        await db.collection("projects").updateOne(
+            { _id: new ObjectId(id) },
+            { $set: updateData }
+        );
 
         revalidatePath("/dashboard/cms");
         return { message: "Project updated" };
     } catch (e) {
+        console.error("Failed to update project:", e);
         return { message: "Failed to update project" };
     }
 }
 
 export async function deleteProject(id: string) {
     try {
-        await fetch(`${API_URL}/projects/${id}`, { method: 'DELETE' });
+        const client = await clientPromise;
+        const db = client.db('arrowsdesign');
+
+        await db.collection("projects").deleteOne({ _id: new ObjectId(id) });
+
         revalidatePath("/dashboard/cms");
     } catch (e) {
         console.error("Failed to delete project:", e);

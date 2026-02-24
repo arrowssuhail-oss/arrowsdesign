@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, UploadCloud } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+
 // You must set this in your frontend .env.local
 const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY;
 const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT;
@@ -23,9 +23,10 @@ export default function ImageUpload({ onSuccess, className, folder }: ImageUploa
 
     const authenticator = async () => {
         try {
-            const response = await fetch(`${API_URL}/imagekit/auth`);
+            const response = await fetch(`/api/imagekit/auth`);
             if (!response.ok) {
-                throw new Error(`Authentication request failed: ${response.statusText}`);
+                const errText = await response.text();
+                throw new Error(`Authentication request failed: ${response.status} ${errText}`);
             }
             const data = await response.json();
             return data;
